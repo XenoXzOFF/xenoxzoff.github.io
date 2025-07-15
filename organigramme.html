@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organigramme - clg.paname-75.fr</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/organigramme.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo-container">
+                <h1>Collège <span>Paname Sud</span></h1>
+                <small>clg.paname-75.fr</small>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html" class="active">Accueil</a></li>
+                    <li><a href="inscription-eleves.html">Inscription Élèves</a></li>
+                    <li><a href="inscription-personnels.html">Inscription Personnels</a></li>
+                    <li><a href="places-disponibles.html">Places disponibles</a></li>
+                    <li><a href="organigramme.html">Organigramme</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>
+            <button class="mobile-menu-btn" aria-label="Menu mobile">☰</button>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <section class="organigramme-section">
+            <div class="container">
+                <h2>Notre organigramme</h2>
+                
+                <div class="org-chart">
+                    <div class="org-level">
+                        <div class="org-node director">
+                            <div class="org-role">Chef d'établissement</div>
+                            <div class="org-name">Nathan BROSSEAU</div>
+                        </div>
+                    </div>
+                    
+                    <div class="org-level">
+                        <div class="org-node">
+                            <div class="org-role">CPE</div>
+                            <div class="org-name">Sophie Lambert</div>
+                            <div class="org-stats">Équipe: <span class="discord-count" data-role="cpe">3</span></div>
+                        </div>
+                        <div class="org-node">
+                            <div class="org-role">Intendance</div>
+                            <div class="org-name">Pierre Dubois</div>
+                            <div class="org-stats">Équipe: <span class="discord-count" data-role="intendance">5</span></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Autres niveaux -->
+                </div>
+                
+                <div class="discord-stats">
+                    <h3>Statistiques du personnel sur Discord</h3>
+                    <div class="stats-grid" id="discord-roles-stats">
+                        <!-- Rempli dynamiquement -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="scripts/main.js"></script>
+    <script src="scripts/discord-roles.js"></script>
+</body>
+</html>

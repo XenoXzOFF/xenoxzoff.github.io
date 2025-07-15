@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription Élèves - Collège Paname Sud</title>
+    <link rel="stylesheet" href="../styles/main.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo-container">
+                <h1>Collège <span>Paname Sud</span></h1>
+                <small>clg.paname-75.fr</small>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html" class="active">Accueil</a></li>
+                    <li><a href="inscription-eleves.html">Inscription Élèves</a></li>
+                    <li><a href="inscription-personnels.html">Inscription Personnels</a></li>
+                    <li><a href="places-disponibles.html">Places disponibles</a></li>
+                    <li><a href="organigramme.html">Organigramme</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>
+            <button class="mobile-menu-btn" aria-label="Menu mobile">☰</button>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <section class="form-section">
+            <div class="container">
+                <h2>Formulaire d'inscription Élèves</h2>
+                <form id="eleveForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="prenom">Prénom *</label>
+                            <input type="text" id="prenom" name="prenom" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="nom">Nom *</label>
+                            <input type="text" id="nom" name="nom" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="classe">Classe souhaitée *</label>
+                            <select id="classe" name="classe" required>
+                                <option value="">Choisir une classe</option>
+                                <option value="6eme">6ème</option>
+                                <option value="5eme">5ème</option>
+                                <option value="4eme">4ème</option>
+                                <option value="3eme">3ème</option>
+                            </select>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="message">Décrivez votre motivation (optionnel)</label>
+                            <textarea id="message" name="message" rows="4"></textarea>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="fichier">Joindre un fichier (optionnel)</label>
+                            <input type="file" id="fichier" name="fichier">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn primary">Envoyer la demande</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>© 2025 Collège Paname Sud - Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <script src="../scripts/main.js"></script>
+</body>
+</html>

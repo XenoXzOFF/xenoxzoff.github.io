@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Places disponibles - clg.paname-75.fr</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo-container">
+                <h1>Collège <span>Paname Sud</span></h1>
+                <small>clg.paname-75.fr</small>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html" class="active">Accueil</a></li>
+                    <li><a href="inscription-eleves.html">Inscription Élèves</a></li>
+                    <li><a href="inscription-personnels.html">Inscription Personnels</a></li>
+                    <li><a href="places-disponibles.html">Places disponibles</a></li>
+                    <li><a href="organigramme.html">Organigramme</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>
+            <button class="mobile-menu-btn" aria-label="Menu mobile">☰</button>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <section class="availability-section">
+            <div class="container">
+                <h2>Places disponibles</h2>
+                <p class="last-update">Dernière mise à jour: <span id="update-time"></span></p>
+                
+                <div class="availability-grid">
+                    <div class="availability-card">
+                        <h3>6ème</h3>
+                        <div class="progress-container">
+                            <div class="progress-bar" style="width: 75%"></div>
+                        </div>
+                        <div class="availability-info">
+                            <span class="available">15 places disponibles</span>
+                            <span class="total">sur 60 places</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Répéter pour chaque niveau -->
+                </div>
+                
+                <div class="personnel-availability">
+                    <h3>Postes disponibles</h3>
+                    <div class="personnel-grid">
+                        <div class="personnel-card">
+                            <h4>Professeur de Mathématiques</h4>
+                            <div class="poste-info">
+                                <span class="available">2 postes</span>
+                                <span class="filled">(3 occupés)</span>
+                            </div>
+                        </div>
+                        <!-- Autres postes -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="scripts/main.js"></script>
+    <script src="scripts/availability.js"></script>
+</body>
+</html>

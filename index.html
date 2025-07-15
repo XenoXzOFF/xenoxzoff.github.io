@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collège Paname Sud - clg.paname-75.fr</title>
+    <meta name="description" content="Établissement scolaire d'excellence à Paris">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo-container">
+                <h1>Collège <span>Paname Sud</span></h1>
+                <small>clg.paname-75.fr</small>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html" class="active">Accueil</a></li>
+                    <li><a href="inscription-eleves.html">Inscription Élèves</a></li>
+                    <li><a href="inscription-personnels.html">Inscription Personnels</a></li>
+                    <li><a href="places-disponibles.html">Places disponibles</a></li>
+                    <li><a href="organigramme.html">Organigramme</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>
+            <button class="mobile-menu-btn" aria-label="Menu mobile">☰</button>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <section class="welcome-section">
+            <div class="container">
+                <h2>Bienvenue au Collège Paname Sud</h2>
+                <p class="subtitle">Un établissement privé où chaque élève trouve sa voie</p>
+                
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-value" id="total-eleves">0</node></div>
+                        <div class="stat-label">Élèves</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="total-personnel">0</div>
+                        <div class="stat-label">Personnels</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="total-membres">0</div>
+                        <div class="stat-label">Total</div>
+                    </div>
+                </div>
+                
+                <div class="cta-buttons">
+                    <a href="inscription-eleves.html" class="btn primary">S'inscrire en tant qu'élève</a>
+                    <a href="inscription-personnels.html" class="btn secondary">Inscription personnels</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ... autres sections ... -->
+    </main>
+
+    <script src="scripts/main.js"></script>
+    <script src="scripts/discord-stats.js"></script>
+</body>
+</html>
