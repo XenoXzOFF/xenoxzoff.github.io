@@ -3,30 +3,44 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Places disponibles</title>
+  <title>Places - Collège Paname Sud</title>
+  <link rel="stylesheet" href="css/style.css" />
   <link rel="icon" href="assets/favicon.ico" />
-  <link rel="stylesheet" href="css/styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
 </head>
 <body>
   <header>
-    <img src="assets/logo.png" alt="Logo du site" class="logo" />
-    <h1>Places disponibles</h1>
-    <nav>
-      <a href="index.html">Accueil</a>
-      <a href="organigramme.html">Organigramme</a>
-      <a href="places.html" class="active">Places</a>
-      <a href="login.php">Admin</a>
-    </nav>
+    <div class="container header-flex">
+      <div class="logo-svg">
+        <img src="assets/logo.png" alt="Logo Collège Paname Sud" class="logo-img" />
+      </div>
+      <div class="logo">Collège Paname Sud</div>
+      <nav>
+        <ul>
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="organigramme.html">Organigramme</a></li>
+          <li><a href="places.html" class="active">Places</a></li>
+          <li><a href="login.html">Admin</a></li>
+        </ul>
+      </nav>
+    </div>
   </header>
+
   <main>
-    <section id="places-container">
-      <!-- Liste des places injectée via JS -->
-      <p>Chargement des places...</p>
+    <section class="container">
+      <h2>Places disponibles</h2>
+      <div id="places-list" class="places-list">
+        <!-- Places insérées via JS -->
+      </div>
     </section>
   </main>
+
   <footer>
-    <p>© 2025 Collège - Tous droits réservés</p>
+    <div class="container">
+      <p>&copy; 2025 Collège Paname Sud. Tous droits réservés.</p>
+    </div>
   </footer>
+
   <script src="js/main.js"></script>
 </body>
 </html>

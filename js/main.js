@@ -1,272 +1,263 @@
-// main.js : gère affichage organigramme, places, et admin (modal + AJAX)
+// ==== Data ====
 
-// Variables globales
-let members = [];
-let places = [];
+const ORGANIGRAMME_STORAGE_KEY = 'organigrammeData';
+const PLACES_STORAGE_KEY = 'placesData';
+const ADMIN_PASSWORD = 'admin123'; // mot de passe simple côté client (pas sécurisé en prod)
 
-// Fetch données pour organigramme et places (page publique)
-function fetchData() {
-  fetch('data.json')
-    .then(resp => resp.json())
-    .then(data => {
-      members = data.members || [];
-      places = data.places || [];
-      if (document.getElementById('org-container')) renderOrganigramme();
-      if (document.getElementById('places-container')) renderPlaces();
-      if (document.getElementById('members-table')) renderMembersTable();
-      if (document.getElementById('places-table')) renderPlacesTable();
-    })
-    .catch(() => {
-      console.error('Erreur chargement data.json');
-    });
-}
+// Récupérer données localStorage ou valeurs par défaut
+let organigramme = JSON.parse(localStorage.getItem(ORGANIGRAMME_STORAGE_KEY)) || [
+  { id: 1, name: 'Mme Dupont', role: 'Directeur' },
+  { id: 2, name: 'M. Martin', role: 'Professeur Principal' },
+  { id: 3, name: 'Mme Durant', role: 'Professeur' }
+];
 
-// Organigramme public
+let places = JSON.parse(localStorage.getItem(PLACES_STORAGE_KEY)) || [
+  { id: 1, name: 'Salle 101', max: 30, remaining: 5 },
+  { id: 2, name: 'Salle 102', max: 25, remaining: 0 }
+];
+
+// ==== Fonctions de rendu ====
+
 function renderOrganigramme() {
-  const container = document.getElementById('org-container');
+  const container = document.getElementById('organigramme-list');
   if (!container) return;
-  if (members.length === 0) {
-    container.innerHTML = '<p>Aucun membre dans l\'organigramme.</p>';
-    return;
-  }
-  let html = '<ul class="org-list">';
-  members.forEach(m => {
-    html += `<li><strong>${escapeHtml(m.name)}</strong> - <em>${escapeHtml(m.role)}</em></li>`;
+
+  container.innerHTML = '';
+  organigramme.forEach(member => {
+    const div = document.createElement('div');
+    div.className = 'member';
+    div.innerHTML = `<h3>${member.name}</h3><p>${member.role}</p>`;
+    container.appendChild(div);
   });
-  html += '</ul>';
-  container.innerHTML = html;
 }
 
-// Places publiques
 function renderPlaces() {
-  const container = document.getElementById('places-container');
+  const container = document.getElementById('places-list');
   if (!container) return;
-  if (places.length === 0) {
-    container.innerHTML = '<p>Aucune place disponible.</p>';
+
+  container.innerHTML = '';
+  places.forEach(place => {
+    const div = document.createElement('div');
+    div.className = 'place';
+    div.innerHTML = `
+      <h3>${place.name}</h3>
+      <p>Places restantes: ${place.remaining} / ${place.max}</p>
+    `;
+    container.appendChild(div);
+  });
+}
+
+// ==== Admin page ====
+
+function renderAdminOrganigramme() {
+  const container = document.getElementById('organigramme-admin-list');
+  if (!container) return;
+
+  container.innerHTML = '';
+  organigramme.forEach(member => {
+    const div = document.createElement('div');
+    div.className = 'member';
+    div.innerHTML = `
+      <h3>${member.name}</h3>
+      <p>${member.role}</p>
+      <button class="btn-edit" data-id="${member.id}" title="Modifier">&#9998;</button>
+      <button class="btn-delete" data-id="${member.id}" title="Supprimer">&#10060;</button>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function renderAdminPlaces() {
+  const container = document.getElementById('places-admin-list');
+  if (!container) return;
+
+  container.innerHTML = '';
+  places.forEach(place => {
+    const div = document.createElement('div');
+    div.className = 'place';
+    div.innerHTML = `
+      <h3>${place.name}</h3>
+      <p>Places restantes: ${place.remaining} / ${place.max}</p>
+      <button class="btn-edit" data-id="${place.id}" title="Modifier">&#9998;</button>
+      <button class="btn-delete" data-id="${place.id}" title="Supprimer">&#10060;</button>
+    `;
+    container.appendChild(div);
+  });
+}
+
+// ==== Modal helpers ====
+
+const modalMember = document.getElementById('modal-member');
+const modalPlace = document.getElementById('modal-place');
+const closeButtons = document.querySelectorAll('.close');
+
+closeButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    modalMember.style.display = 'none';
+    modalPlace.style.display = 'none';
+  });
+});
+
+window.onclick = function(event) {
+  if (event.target === modalMember) modalMember.style.display = 'none';
+  if (event.target === modalPlace) modalPlace.style.display = 'none';
+};
+
+// ==== Ajout / modification membre ====
+
+let editingMemberId = null;
+let editingPlaceId = null;
+
+function openMemberModal(editId = null) {
+  editingMemberId = editId;
+  const form = document.getElementById('form-member');
+  if (editId !== null) {
+    const member = organigramme.find(m => m.id === editId);
+    form['member-name'].value = member.name;
+    form['member-role'].value = member.role;
+    document.getElementById('modal-member-title').textContent = 'Modifier un membre';
+  } else {
+    form.reset();
+    document.getElementById('modal-member-title').textContent = 'Ajouter un membre';
+  }
+  modalMember.style.display = 'flex';
+}
+
+function openPlaceModal(editId = null) {
+  editingPlaceId = editId;
+  const form = document.getElementById('form-place');
+  if (editId !== null) {
+    const place = places.find(p => p.id === editId);
+    form['place-name'].value = place.name;
+    form['place-max'].value = place.max;
+    form['place-remaining'].value = place.remaining;
+    document.getElementById('modal-place-title').textContent = 'Modifier une place';
+  } else {
+    form.reset();
+    document.getElementById('modal-place-title').textContent = 'Ajouter une place';
+  }
+  modalPlace.style.display = 'flex';
+}
+
+// ==== Sauvegarde ====
+
+function saveOrganigramme() {
+  localStorage.setItem(ORGANIGRAMME_STORAGE_KEY, JSON.stringify(organigramme));
+}
+
+function savePlaces() {
+  localStorage.setItem(PLACES_STORAGE_KEY, JSON.stringify(places));
+}
+
+// ==== Événements formulaire ====
+
+document.getElementById('form-member').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const name = this['member-name'].value.trim();
+  const role = this['member-role'].value.trim();
+
+  if (!name || !role) {
+    alert('Veuillez remplir tous les champs.');
     return;
   }
-  let html = '<table><thead><tr><th>Nom</th><th>Restantes</th><th>Max</th></tr></thead><tbody>';
-  places.forEach(p => {
-    html += `<tr><td>${escapeHtml(p.name)}</td><td>${p.remaining}</td><td>${p.max}</td></tr>`;
-  });
-  html += '</tbody></table>';
-  container.innerHTML = html;
-}
 
-// Admin : affichage membres
-function renderMembersTable() {
-  const tbody = document.querySelector('#members-table tbody');
-  tbody.innerHTML = '';
-  members.forEach((m, i) => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td>${escapeHtml(m.name)}</td>
-      <td>${escapeHtml(m.role)}</td>
-      <td>
-        <button class="action-btn" onclick="openMemberModal(${i})">Modifier</button>
-        <button class="action-btn" onclick="deleteMember(${i})">Supprimer</button>
-      </td>
-    `;
-    tbody.appendChild(tr);
-  });
-}
+  if (editingMemberId !== null) {
+    // Modifier membre existant
+    const member = organigramme.find(m => m.id === editingMemberId);
+    member.name = name;
+    member.role = role;
+  } else {
+    // Ajouter membre
+    const newId = organigramme.length ? Math.max(...organigramme.map(m => m.id)) + 1 : 1;
+    organigramme.push({ id: newId, name, role });
+  }
 
-// Admin : affichage places
-function renderPlacesTable() {
-  const tbody = document.querySelector('#places-table tbody');
-  tbody.innerHTML = '';
-  places.forEach((p, i) => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td>${escapeHtml(p.name)}</td>
-      <td>${p.remaining}</td>
-      <td>${p.max}</td>
-      <td>
-        <button class="action-btn" onclick="openPlaceModal(${i})">Modifier</button>
-        <button class="action-btn" onclick="deletePlace(${i})">Supprimer</button>
-      </td>
-    `;
-    tbody.appendChild(tr);
-  });
-}
+  saveOrganigramme();
+  renderOrganigramme();
+  renderAdminOrganigramme();
+  modalMember.style.display = 'none';
+});
 
-// Modals
-const modal = document.getElementById('modal');
-const modalForm = document.getElementById('modal-form');
+document.getElementById('form-place').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const name = this['place-name'].value.trim();
+  const max = parseInt(this['place-max'].value, 10);
+  const remaining = parseInt(this['place-remaining'].value, 10);
 
-function openModal() {
-  modal.classList.remove('hidden');
-}
+  if (!name || isNaN(max) || isNaN(remaining) || max < 0 || remaining < 0 || remaining > max) {
+    alert('Veuillez remplir correctement tous les champs.');
+    return;
+  }
 
-function closeModal() {
-  modal.classList.add('hidden');
-  modalForm.innerHTML = '';
-}
+  if (editingPlaceId !== null) {
+    const place = places.find(p => p.id === editingPlaceId);
+    place.name = name;
+    place.max = max;
+    place.remaining = remaining;
+  } else {
+    const newId = places.length ? Math.max(...places.map(p => p.id)) + 1 : 1;
+    places.push({ id: newId, name, max, remaining });
+  }
 
-// Helper escape HTML
-function escapeHtml(text) {
-  return text.replace(/[&<>"']/g, function(m) {
-    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];
-  });
-}
+  savePlaces();
+  renderPlaces();
+  renderAdminPlaces();
+  modalPlace.style.display = 'none';
+});
 
-// === Gestion membres ===
+// ==== Suppression ====
 
-function openMemberModal(index = -1) {
-  modalForm.innerHTML = `
-    <h3>${index >= 0 ? 'Modifier' : 'Ajouter'} un membre</h3>
-    <label for="name">Nom :</label>
-    <input type="text" id="name" name="name" required value="${index >= 0 ? escapeHtml(members[index].name) : ''}">
-    <label for="role">Rôle :</label>
-    <select id="role" name="role" required>
-      <option value="">-- Choisir --</option>
-      <option value="Président" ${index >= 0 && members[index].role === 'Président' ? 'selected' : ''}>Président</option>
-      <option value="Secrétaire" ${index >= 0 && members[index].role === 'Secrétaire' ? 'selected' : ''}>Secrétaire</option>
-      <option value="Trésorier" ${index >= 0 && members[index].role === 'Trésorier' ? 'selected' : ''}>Trésorier</option>
-      <option value="Autre" ${index >= 0 && !['Président','Secrétaire','Trésorier'].includes(members[index].role) ? 'selected' : ''}>Autre</option>
-    </select>
-    <div id="otherRoleContainer" style="display: ${index >= 0 && !['Président','Secrétaire','Trésorier'].includes(members[index].role) ? 'block' : 'none'};">
-      <label for="otherRole">Préciser rôle :</label>
-      <input type="text" id="otherRole" name="otherRole" value="${index >= 0 && !['Président','Secrétaire','Trésorier'].includes(members[index].role) ? escapeHtml(members[index].role) : ''}">
-    </div>
-    <button type="submit">${index >= 0 ? 'Modifier' : 'Ajouter'}</button>
-  `;
-  // Affichage conditionnel rôle
-  modalForm.querySelector('#role').addEventListener('change', function() {
-    if (this.value === 'Autre') {
-      document.getElementById('otherRoleContainer').style.display = 'block';
-    } else {
-      document.getElementById('otherRoleContainer').style.display = 'none';
+document.getElementById('organigramme-admin-list').addEventListener('click', function(e) {
+  if (e.target.classList.contains('btn-delete')) {
+    const id = parseInt(e.target.dataset.id, 10);
+    if (confirm('Voulez-vous vraiment supprimer ce membre ?')) {
+      organigramme = organigramme.filter(m => m.id !== id);
+      saveOrganigramme();
+      renderOrganigramme();
+      renderAdminOrganigramme();
     }
-  });
+  } else if (e.target.classList.contains('btn-edit')) {
+    const id = parseInt(e.target.dataset.id, 10);
+    openMemberModal(id);
+  }
+});
 
-  modalForm.onsubmit = function(e) {
-    e.preventDefault();
-    let name = this.name.value.trim();
-    let role = this.role.value;
-    if (role === 'Autre') {
-      role = this.otherRole.value.trim();
+document.getElementById('places-admin-list').addEventListener('click', function(e) {
+  if (e.target.classList.contains('btn-delete')) {
+    const id = parseInt(e.target.dataset.id, 10);
+    if (confirm('Voulez-vous vraiment supprimer cette place ?')) {
+      places = places.filter(p => p.id !== id);
+      savePlaces();
+      renderPlaces();
+      renderAdminPlaces();
     }
-    if (!name || !role) {
-      alert('Nom et rôle sont obligatoires.');
-      return;
-    }
-    saveMember(index, name, role);
-  };
+  } else if (e.target.classList.contains('btn-edit')) {
+    const id = parseInt(e.target.dataset.id, 10);
+    openPlaceModal(id);
+  }
+});
 
-  openModal();
-}
+// ==== Admin login ====
 
-function saveMember(index, name, role) {
-  const formData = new FormData();
-  formData.append('action', 'save_member');
-  formData.append('index', index);
-  formData.append('name', name);
-  formData.append('role', role);
+const loginForm = document.getElementById('login-form');
+const loginSection = document.getElementById('login-section');
+const adminSection = document.getElementById('admin-section');
 
-  fetch('admin.php', {
-    method: 'POST',
-    body: formData
-  }).then(resp => resp.json())
-    .then(data => {
-      if (data.success) {
-        members = data.members;
-        renderMembersTable();
-        closeModal();
-      } else {
-        alert(data.message || 'Erreur lors de la sauvegarde');
-      }
-    });
-}
+loginForm.addEventListener('submit', function(e) {
+  e.preventDefault();
+  const password = this['password'].value;
 
-function deleteMember(index) {
-  if (!confirm('Supprimer ce membre ?')) return;
-  const formData = new FormData();
-  formData.append('action', 'delete_member');
-  formData.append('index', index);
-  fetch('admin.php', {
-    method: 'POST',
-    body: formData
-  }).then(resp => resp.json())
-    .then(data => {
-      if (data.success) {
-        members = data.members;
-        renderMembersTable();
-      } else {
-        alert(data.message || 'Erreur suppression');
-      }
-    });
-}
+  if (password === ADMIN_PASSWORD) {
+    loginSection.style.display = 'none';
+    adminSection.style.display = 'block';
+    renderAdminOrganigramme();
+    renderAdminPlaces();
+  } else {
+    alert('Mot de passe incorrect.');
+  }
+});
 
-// === Gestion places ===
+// ==== Initial render ====
 
-function openPlaceModal(index = -1) {
-  modalForm.innerHTML = `
-    <h3>${index >= 0 ? 'Modifier' : 'Ajouter'} une place</h3>
-    <label for="name">Nom :</label>
-    <input type="text" id="name" name="name" required value="${index >= 0 ? escapeHtml(places[index].name) : ''}">
-    <label for="remaining">Places restantes :</label>
-    <input type="number" id="remaining" name="remaining" min="0" required value="${index >= 0 ? places[index].remaining : 0}">
-    <label for="max">Places maximum :</label>
-    <input type="number" id="max" name="max" min="1" required value="${index >= 0 ? places[index].max : 1}">
-    <button type="submit">${index >= 0 ? 'Modifier' : 'Ajouter'}</button>
-  `;
-
-  modalForm.onsubmit = function(e) {
-    e.preventDefault();
-    let name = this.name.value.trim();
-    let remaining = parseInt(this.remaining.value, 10);
-    let max = parseInt(this.max.value, 10);
-    if (!name || max < 1 || remaining < 0 || remaining > max) {
-      alert('Données invalides.');
-      return;
-    }
-    savePlace(index, name, remaining, max);
-  };
-
-  openModal();
-}
-
-function savePlace(index, name, remaining, max) {
-  const formData = new FormData();
-  formData.append('action', 'save_place');
-  formData.append('index', index);
-  formData.append('name', name);
-  formData.append('remaining', remaining);
-  formData.append('max', max);
-
-  fetch('admin.php', {
-    method: 'POST',
-    body: formData
-  }).then(resp => resp.json())
-    .then(data => {
-      if (data.success) {
-        places = data.places;
-        renderPlacesTable();
-        closeModal();
-      } else {
-        alert(data.message || 'Erreur lors de la sauvegarde');
-      }
-    });
-}
-
-function deletePlace(index) {
-  if (!confirm('Supprimer cette place ?')) return;
-  const formData = new FormData();
-  formData.append('action', 'delete_place');
-  formData.append('index', index);
-  fetch('admin.php', {
-    method: 'POST',
-    body: formData
-  }).then(resp => resp.json())
-    .then(data => {
-      if (data.success) {
-        places = data.places;
-        renderPlacesTable();
-      } else {
-        alert(data.message || 'Erreur suppression');
-      }
-    });
-}
-
-document.addEventListener('DOMContentLoaded', fetchData);
+renderOrganigramme();
+renderPlaces();

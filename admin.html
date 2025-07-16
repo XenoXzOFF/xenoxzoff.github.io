@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin - Collège Paname Sud</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="assets/favicon.ico" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <header>
+    <div class="container header-flex">
+      <div class="logo-svg">
+        <img src="assets/logo.png" alt="Logo Collège Paname Sud" class="logo-img" />
+      </div>
+      <div class="logo">Collège Paname Sud</div>
+      <nav>
+        <ul>
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="organigramme.html">Organigramme</a></li>
+          <li><a href="places.html">Places</a></li>
+          <li><a href="login.html" class="active">Admin</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="container admin-section">
+      <h2>Gestion de l'organigramme</h2>
+      <div id="organigramme-admin-list" class="organigramme-list admin-list">
+        <!-- Liste des membres avec options modifier/supprimer via JS -->
+      </div>
+      <button id="btn-add-member" class="btn blue">Ajouter un membre</button>
+
+      <hr />
+
+      <h2>Gestion des places</h2>
+      <div id="places-admin-list" class="places-list admin-list">
+        <!-- Liste des places avec options modifier/supprimer via JS -->
+      </div>
+      <button id="btn-add-place" class="btn yellow">Ajouter une place</button>
+
+      <button id="btn-logout" class="btn red logout-btn">Déconnexion</button>
+    </section>
+  </main>
+
+  <!-- Modals -->
+
+  <div id="modal-member" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h3 id="modal-member-title">Ajouter un membre</h3>
+      <form id="form-member">
+        <label for="member-name">Nom</label>
+        <input type="text" id="member-name" required />
+        
+        <label for="member-role">Rôle</label>
+        <select id="member-role" required>
+          <option value="">-- Sélectionnez un rôle --</option>
+          <option value="Directeur">Directeur</option>
+          <option value="Professeur Principal">Professeur Principal</option>
+          <option value="Professeur">Professeur</option>
+          <option value="Personnel Administratif">Personnel Administratif</option>
+          <option value="Surveillant">Surveillant</option>
+        </select>
+
+        <button type="submit" class="btn blue">Enregistrer</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="modal-place" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h3 id="modal-place-title">Ajouter une place</h3>
+      <form id="form-place">
+        <label for="place-name">Nom de la place</label>
+        <input type="text" id="place-name" required />
+
+        <label for="place-max">Nombre maximum</label>
+        <input type="number" id="place-max" min="1" required />
+
+        <label for="place-remaining">Places restantes</label>
+        <input type="number" id="place-remaining" min="0" required />
+
+        <button type="submit" class="btn yellow">Enregistrer</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
