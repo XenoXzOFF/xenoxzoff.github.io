@@ -1,0 +1,301 @@
+/* Refonte complète - Collège Paname Sud */
+:root {
+  --main-blue: #1e388c;
+  --main-yellow: #ffd600;
+  --main-bg: #e7edfa;
+  --main-white: #fff;
+  --main-shadow: 0 8px 32px #0001;
+  --main-radius: 20px;
+  --main-font: 'Segoe UI', 'Roboto', Arial, sans-serif;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--main-font);
+  background: var(--main-bg);
+  color: #222;
+  min-height: 100vh;
+  scroll-behavior: smooth;
+}
+
+.bg-main { background: var(--main-bg); }
+
+/* NAVBAR */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--main-blue);
+  box-shadow: 0 2px 8px #0001;
+  padding: 0.7rem 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  animation: fadeIn 0.7s;
+}
+.logo-group { display: flex; align-items: center; gap: 0.7rem; }
+.logo-circle {
+  background: linear-gradient(135deg, #3b82f6 60%, var(--main-yellow) 100%);
+  color: #fff;
+  font-weight: bold;
+  font-size: 1.2rem;
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px #0002;
+  border: 2px solid #fff;
+  animation: fadeIn 0.7s;
+}
+.logo-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #fff;
+  letter-spacing: 1px;
+  animation: fadeIn 0.7s;
+}
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 1.2rem;
+  margin: 0;
+  padding: 0;
+}
+.nav-link {
+  text-decoration: none;
+  color: #fff;
+  font-weight: 500;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  border-radius: 8px 8px 0 0;
+  position: relative;
+  transition: color 0.2s, background 0.2s, box-shadow 0.2s, transform 0.2s;
+  animation: fadeInUp 0.7s;
+}
+.nav-link.active {
+  color: var(--main-yellow);
+}
+.nav-link.active::after {
+  content: '';
+  display: block;
+  height: 3px;
+  background: var(--main-yellow);
+  border-radius: 2px;
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: -7px;
+}
+.nav-link:hover, .nav-link:focus {
+  color: var(--main-yellow);
+  background: #1e388c22;
+  box-shadow: 0 4px 16px #ffd60033;
+  transform: translateY(-2px) scale(1.05);
+}
+
+/* MAIN CONTENT */
+.main-content {
+  max-width: 1200px;
+  margin: 2rem auto 0 auto;
+  background: var(--main-white);
+  border-radius: var(--main-radius);
+  box-shadow: var(--main-shadow);
+  padding: 2.5rem 2rem 2rem 2rem;
+  min-height: 60vh;
+  transition: box-shadow 0.3s, transform 0.3s;
+  animation: fadeInUp 0.7s;
+}
+.section-center {
+  text-align: center;
+  animation: fadeIn 0.7s;
+}
+.main-title {
+  color: var(--main-blue);
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-top: 2rem;
+  animation: fadeIn 0.7s;
+}
+.main-subtitle {
+  color: var(--main-blue);
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  animation: fadeIn 0.7s;
+}
+
+/* BUTTONS */
+.btn-group {
+  margin: 2rem 0;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+.btn {
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  padding: 0.7rem 1.5rem;
+  margin: 0.5rem;
+  font-size: 1.1rem;
+  box-shadow: 0 4px 16px #0001;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+  animation: fadeInUp 0.7s;
+  outline: none;
+}
+.btn-blue {
+  background: #19a7f6;
+  color: #fff;
+}
+.btn-blue:hover, .btn-blue:focus {
+  background: #0d8ae6;
+  box-shadow: 0 8px 24px #19a7f699;
+  transform: scale(1.05);
+}
+.btn-yellow {
+  background: var(--main-yellow);
+  color: var(--main-blue);
+}
+.btn-yellow:hover, .btn-yellow:focus {
+  background: #ffe066;
+  box-shadow: 0 8px 24px #ffd60099;
+  transform: scale(1.05);
+}
+
+/* SECTIONS */
+.section-block {
+  margin-top: 2rem;
+  padding: 2rem 0 0 0;
+  animation: fadeInUp 0.7s;
+}
+.section-title {
+  color: var(--main-blue);
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  animation: fadeIn 0.7s;
+}
+.section-list {
+  color: #222;
+  font-size: 1.1rem;
+  margin-top: 1.5rem;
+  line-height: 2;
+  max-width: 700px;
+  animation: fadeInUp 0.7s;
+}
+.section-news {
+  margin-top: 1.2rem;
+  max-width: 900px;
+  animation: fadeInUp 0.7s;
+}
+.news-title {
+  color: var(--main-blue);
+  font-size: 1.3rem;
+  font-weight: 700;
+  animation: fadeIn 0.7s;
+}
+.news-text {
+  color: #222;
+  font-size: 1.05rem;
+  animation: fadeInUp 0.7s;
+}
+
+/* FORMULAIRES */
+form {
+  max-width: 500px;
+  margin: 2rem auto 0 auto;
+  background: #f7faff;
+  border-radius: var(--main-radius);
+  box-shadow: 0 2px 8px #0001;
+  padding: 2rem 1.5rem 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  animation: fadeInUp 0.7s;
+}
+form label {
+  font-weight: 500;
+  color: var(--main-blue);
+  margin-bottom: 0.3rem;
+  display: block;
+}
+form input, form select, form textarea {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  border: 1.5px solid #b3c6e0;
+  border-radius: 7px;
+  font-size: 1rem;
+  margin-top: 0.2rem;
+  margin-bottom: 0.2rem;
+  background: #fff;
+  transition: border 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+}
+form input:focus, form select:focus, form textarea:focus {
+  border: 1.5px solid var(--main-blue);
+  box-shadow: 0 0 0 2px #1e388c33;
+  outline: none;
+}
+form button[type="submit"] {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+/* ORGANIGRAMME & PLACES */
+.org-placeholder {
+  background: #e7edfa;
+  border: 2px dashed #b3c6e0;
+  border-radius: 12px;
+  color: #888;
+  padding: 1.5rem;
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: 1.1rem;
+  animation: fadeInUp 0.7s;
+}
+#places-eleves, #places-personnels {
+  color: var(--main-blue);
+  font-weight: bold;
+  font-size: 1.2em;
+}
+#max-eleves, #max-personnels {
+  color: #888;
+  font-size: 1em;
+}
+
+/* FOOTER */
+.footer {
+  background: #e3eaff;
+  color: var(--main-blue);
+  text-align: center;
+  font-size: 1rem;
+  padding: 1.2rem 0 1rem 0;
+  margin-top: 2rem;
+  border-radius: 0 0 var(--main-radius) var(--main-radius);
+  animation: fadeIn 0.7s;
+}
+
+/* ANIMATIONS */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .main-content { padding: 1.2rem; }
+  .section-title { font-size: 1.3rem; }
+}
+@media (max-width: 700px) {
+  .navbar { flex-direction: column; gap: 0.5rem; padding: 1rem; }
+  .main-content { padding: 0.5rem; }
+  .logo-title { font-size: 1.1rem; }
+  .btn-group { flex-direction: column; }
+  form { padding: 1rem 0.5rem; }
+}
