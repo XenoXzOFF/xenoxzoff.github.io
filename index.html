@@ -1,62 +1,92 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Collège Paname Sud</title>
-  <link rel="stylesheet" href="css/style.css" />
-  <link rel="icon" href="assets/favicon.ico" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Site en Développement</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #1e1e2f;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    .marquee {
+      width: 100%;
+      overflow: hidden;
+      white-space: nowrap;
+      box-sizing: border-box;
+      border-top: 1px solid #444;
+      border-bottom: 1px solid #444;
+      background-color: #2b2b3c;
+      padding: 10px 0;
+      position: absolute;
+      top: 0;
+    }
+
+    .marquee span {
+      display: inline-block;
+      padding-left: 100%;
+      animation: scroll-left 15s linear infinite;
+      font-size: 1.2rem;
+      color: #ccc;
+    }
+
+    @keyframes scroll-left {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(-100%);
+      }
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 40px;
+      margin-top: 60px;
+    }
+
+    .links a {
+      display: inline-block;
+      margin: 10px;
+      padding: 12px 20px;
+      background-color: #5865F2;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: background-color 0.3s ease;
+    }
+
+    .links a.pronote {
+      background-color: #008080;
+    }
+
+    .links a:hover {
+      filter: brightness(1.1);
+    }
+  </style>
 </head>
 <body>
-  <header>
-    <div class="container header-flex">
-      <div class="logo-svg">
-        <img src="assets/logo.png" alt="Logo Collège Paname Sud" class="logo-img" />
-      </div>
-      <div class="logo">Collège Paname Sud</div>
-      <nav>
-        <ul>
-          <li><a href="index.html" class="active">Accueil</a></li>
-          <li><a href="organigramme.html">Organigramme</a></li>
-          <li><a href="places.html">Places</a></li>
-          <li><a href="login.html">Admin</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
+  <div class="marquee">
+    <span>🔧 Ce site est actuellement en cours de développement. Merci de votre patience. 🔧</span>
+  </div>
 
-  <main>
-    <section class="hero">
-      <div class="container text-center">
-        <h1>Bienvenue au Collège Paname Sud</h1>
-        <p>Un établissement privé où chaque élève trouve sa voie.</p>
-        <div class="hero-buttons">
-          <a href="organigramme.html" class="btn blue">Voir l'organigramme</a>
-          <a href="places.html" class="btn yellow">Voir les places</a>
-        </div>
-      </div>
-    </section>
+  <h1>Ce site est actuellement en cours de développement</h1>
+  <p>Nous travaillons dur pour vous offrir la meilleure expérience possible. Revenez bientôt !</p>
+  <p>En attendant, vous pouvez consulter les liens suivants :</p>
 
-    <section class="intro">
-      <div class="container">
-        <h2>Pourquoi choisir notre collège ?</h2>
-        <ul>
-          <li>Excellence pédagogique et accompagnement personnalisé</li>
-          <li>Équipements modernes et environnement sécurisé</li>
-          <li>Activités extrascolaires variées et enrichissantes</li>
-          <li>Équipe enseignante qualifiée et engagée</li>
-        </ul>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <div class="container">
-      <p>&copy; 2025 Collège Paname Sud. Tous droits réservés.</p>
-    </div>
-  </footer>
-
-  <script src="js/main.js"></script>
+  <div class="links">
+    <a href="https://discord.gg/8qXgBp6dS3" target="_blank">Rejoindre le Discord</a>
+    <a href="http://clg.paname-75.fr/pronote" class="pronote" target="_blank">Accéder à Pronote</a>
+  </div>
 </body>
 </html>
