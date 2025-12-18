@@ -1,0 +1,20 @@
+<nav class="navbar">
+    <a href="/" class="logo">PANAME SUD</a>
+    
+    <div class="nav-links">
+        <a href="/">Accueil</a>
+        <a href="/membres">Organigramme</a>
+        
+        <% if (user) { %>
+            <a href="/dashboard">Dashboard</a>
+            
+            <% if (user.isAdmin) { %>
+                <a href="/admin" style="color: var(--gold); border: 1px solid var(--border); padding: 5px 10px; border-radius: 4px;">Admin</a>
+            <% } %>
+            
+            <a href="/logout" class="btn-logout">Déconnexion</a>
+        <% } else { %>
+            <a href="/auth/discord" class="btn-login">Connexion</a>
+        <% } %>
+    </div>
+</nav>

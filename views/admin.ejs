@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Direction | Paname Sud</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <%- include('partials/nav') %>
+
+    <div class="container animate-in">
+        <header style="text-align: center; margin-bottom: 50px;">
+            <h1 class="hero-title" style="font-size: 3rem;">DIRECTION</h1>
+            <p class="hero-subtitle">Gestion des admissions académiques</p>
+        </header>
+
+        <div class="main-card" style="padding: 20px;">
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Candidat</th>
+                            <th>Poste</th>
+                            <th>Date</th>
+                            <th>Statut</th>
+                            <th style="text-align: right;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% applications.forEach(app => { %>
+                        <tr>
+                            <td style="color: white; font-weight: bold;"><%= app.username %></td>
+                            <td><%= app.poste %></td>
+                            <td><%= app.createdAt %></td>
+                            <td>
+                                <span class="status-badge status-<%= app.status %>">
+                                    <%= app.status %>
+                                </span>
+                            </td>
+                            <td style="text-align: right;">
+                                <a href="/admin/view/<%= app.userId %>" class="btn btn-outline" style="padding: 8px 15px; font-size: 0.6rem;">Voir Dossier</a>
+                            </td>
+                        </tr>
+                        <% }) %>
+                        <% if (applications.length === 0) { %>
+                            <tr>
+                                <td colspan="5" style="text-align: center; padding: 40px;">Aucune candidature en attente.</td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <footer style="text-align: center; padding: 40px; color: var(--gold-dark); font-size: 0.7rem; letter-spacing: 2px;">
+    &copy; <%= new Date().getFullYear() %> PANAME SUD - INSTITUTION PRIVÉE
+</footer>
+</body>
+</html>

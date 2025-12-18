@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Tableau de Bord | Paname Sud</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <%- include('partials/nav') %>
+
+    <div class="container animate-in">
+        <div class="hero-container" style="margin-bottom: 40px;">
+            <p class="hero-subtitle-elite">Espace Candidat Personnel</p>
+            <h1 class="hero-title" style="font-size: 2.5rem;">BIENVENUE, <%= user.username %></h1>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 30px;">
+            
+            <div class="main-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                    <h2 style="font-family: 'Montserrat'; font-size: 1rem; color: var(--gold); letter-spacing: 2px;">VOTRE DOSSIER ACTUEL</h2>
+                    <% if (appData) { %>
+                        <span class="status-badge status-<%= appData.status %>"><%= appData.status %></span>
+                    <% } %>
+                </div>
+
+                <% if (appData) { %>
+                    <div style="margin-bottom: 20px;">
+                        <p style="font-size: 0.8rem; color: var(--text-mid);">Candidature pour le poste de :</p>
+                        <p style="font-size: 1.2rem; font-weight: 700; color: #fff;"><%= appData.posteLabel %></p>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px;">
+                        <div>
+                            <p style="font-size: 0.7rem; color: var(--text-mid);">DATE D'ENVOI</p>
+                            <p style="font-size: 0.9rem;"><%= appData.createdAt %></p>
+                        </div>
+                        <div>
+                            <p style="font-size: 0.7rem; color: var(--text-mid);">DERNIÈRE MISE À JOUR</p>
+                            <p style="font-size: 0.9rem;"><%= appData.updatedAt %></p>
+                        </div>
+                    </div>
+
+                    <% if (appData.status === 'revision') { %>
+                        <div class="status-msg msg-revision">
+                            <strong>Statut : Examen en cours</strong><br>
+                            Votre dossier est actuellement en cours d'examen par la direction. Une réponse vous sera transmise prochainement.
+                        </div>
+                    <% } else if (appData.status === 'accepte') { %>
+                        <div class="status-msg msg-accepte">
+                            <strong>Statut : Félicitations !</strong><br>
+                            Votre dossier a été accepté. Présentez-vous à l'accueil de l'établissement pour finaliser votre intégration.
+                        </div>
+                    <% } else { %>
+                        <div class="status-msg msg-refuse">
+                            <strong>Statut : Dossier Non Retenu</strong><br>
+                            Votre candidature n'a pas été retenue pour le moment. Vous pourrez retenter votre chance ultérieurement.
+                        </div>
+                    <% } %>
+
+                    <div style="margin-top: 30px;">
+                        <a href="/admin/view/<%= user.id %>" class="btn btn-outline" style="width: 100%;">Revoir mon formulaire envoyé</a>
+                    </div>
+
+                <% } else { %>
+                    <div style="text-align: center; padding: 40px 0;">
+                        <p style="color: var(--text-mid); margin-bottom: 20px;">Vous n'avez aucune candidature en cours.</p>
+                        <a href="/apply" class="btn">Déposer un dossier</a>
+                    </div>
+                <% } %>
+            </div>
+
+            <div>
+                <div class="main-card" style="padding: 25px;">
+                    <h3 style="font-family: 'Montserrat'; font-size: 0.8rem; color: var(--gold); margin-bottom: 20px;">STATISTIQUES</h3>
+                    <div style="margin-bottom: 15px;">
+                        <p style="font-size: 0.7rem; color: var(--text-mid);">TENTATIVES TOTALES</p>
+                        <p style="font-size: 1.5rem; font-weight: 800; color: var(--gold);"><%= totalUserApps %></p>
+                    </div>
+                </div>
+
+                <% if (appData && appData.history) { %>
+                <div class="main-card" style="padding: 25px;">
+                    <h3 style="font-family: 'Montserrat'; font-size: 0.8rem; color: var(--gold); margin-bottom: 20px;">SUIVI DES ACTIONS</h3>
+                    <% appData.history.reverse().slice(0, 5).forEach(item => { %>
+                        <div class="history-item">
+                            <span><%= item.action %></span>
+                            <span style="font-size: 0.65rem; opacity: 0.5;"><%= item.date.split(' ')[0] %></span>
+                        </div>
+                    <% }) %>
+                </div>
+                <% } %>
+            </div>
+
+        </div>
+    </div>
+
+    <footer style="text-align: center; padding: 40px; color: var(--gold-dark); font-size: 0.7rem; letter-spacing: 2px;">
+        &copy; <%= new Date().getFullYear() %> PANAME SUD - INSTITUTION PRIVÉE
+    </footer>
+</body>
+</html>

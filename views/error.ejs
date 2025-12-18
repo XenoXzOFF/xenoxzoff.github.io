@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Erreur <%= code %> | Paname Sud</title>
+    <link rel="stylesheet" href="/style.css">
+    <meta property="og:title" content="⚜️ PANAME SUD - ACCÈS REFUSÉ">
+    <meta property="og:description" content="Vous n'avez pas les permissions requises.">
+    <meta name="theme-color" content="#c5a059">
+</head>
+<body>
+    <%- include('partials/nav') %>
+    <div class="container" style="text-align: center;">
+        <h1 class="hero-title"><%= code %></h1>
+        <p><%= message %></p>
+        <br>
+        <a href="/" class="btn btn-gold">Retour</a>
+    </div>
+    <footer style="text-align: center; padding: 40px; color: var(--gold-dark); font-size: 0.7rem; letter-spacing: 2px;">
+    &copy; <%= new Date().getFullYear() %> PANAME SUD - INSTITUTION PRIVÉE
+</footer>
+</body>
+</html>

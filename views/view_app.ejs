@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Examen Dossier | Paname Sud</title>
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <%- include('partials/nav') %>
+
+    <div class="container animate-in">
+        <div class="main-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px; border-bottom: 1px solid var(--border); padding-bottom: 20px;">
+                <div>
+                    <p style="color:var(--gold); font-size:0.8rem; letter-spacing:2px; text-transform:uppercase; margin:0;">Candidature de</p>
+                    <h1 style="color:#fff; font-family:'Montserrat'; font-size:1.8rem; margin:5px 0 0 0;"><%= app.username %></h1>
+                </div>
+                
+                <% if (user && user.isAdmin) { %>
+                    <button onclick="confirmDeletion('<%= app.userId %>')" class="btn" style="background:#ff4757; color:white!important; border:none; padding: 12px 25px; font-weight: bold; cursor: pointer;">
+                        Supprimer le dossier
+                    </button>
+                <% } %>
+            </div>
+
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:25px; margin-bottom:40px;">
+                <div class="info-group">
+                    <label style="color:var(--gold); font-size:0.7rem; text-transform:uppercase; letter-spacing:1px;">Nom RP déclaré</label>
+                    <p style="font-size:1.1rem; font-weight:bold; margin-top:5px;"><%= app.rpName %></p>
+                </div>
+                <div class="info-group">
+                    <label style="color:var(--gold); font-size:0.7rem; text-transform:uppercase; letter-spacing:1px;">Poste visé</label>
+                    <p style="font-size:1.1rem; font-weight:bold; margin-top:5px;"><%= app.posteLabel %></p>
+                </div>
+                <div class="info-group">
+                    <label style="color:var(--gold); font-size:0.7rem; text-transform:uppercase; letter-spacing:1px;">Âge</label>
+                    <p style="font-size:1.1rem; font-weight:bold; margin-top:5px;"><%= app.age %> ans</p>
+                </div>
+                <div class="info-group">
+                    <label style="color:var(--gold); font-size:0.7rem; text-transform:uppercase; letter-spacing:1px;">Tentatives totales</label>
+                    <p style="font-size:1.1rem; font-weight:bold; margin-top:5px;">#<%= attempts %></p>
+                </div>
+            </div>
+
+            <div style="margin-bottom:40px;">
+                <label style="color:var(--gold); font-size:0.7rem; text-transform:uppercase; letter-spacing:1px; display:block; margin-bottom:10px;">Lettre de Motivation</label>
+                <div style="background:rgba(255,255,255,0.03); padding:25px; border-radius:12px; border:1px solid var(--border); line-height:1.8; color:#eee; white-space: pre-wrap;">
+                    <%= app.motivations %>
+                </div>
+            </div>
+
+            <div style="margin-bottom:40px;">
+                <label style="color:var(--gold); font-size:0.7rem; text-transform:uppercase; letter-spacing:1px; display:block; margin-bottom:10px;">Suivi du dossier</label>
+                <div style="background:rgba(0,0,0,0.2); border-radius:10px; overflow: hidden;">
+                    <% if (app.history && Array.isArray(app.history)) { %>
+                        <% app.history.slice().reverse().forEach(h => { %>
+                            <div style="font-size:0.85rem; border-bottom:1px solid rgba(255,255,255,0.05); padding:12px 20px; display:flex; justify-content:space-between; align-items:center;">
+                                <span><strong style="color:var(--gold);"><%= h.action %></strong> par <%= h.by %></span>
+                                <span style="opacity:0.5; font-family:monospace;"><%= h.date %></span>
+                            </div>
+                        <% }) %>
+                    <% } else { %>
+                        <div style="padding:20px; text-align:center; opacity:0.5; font-style:italic;">Aucun historique pour ce dossier.</div>
+                    <% } %>
+                </div>
+            </div>
+
+            <% if (user && user.isAdmin) { %>
+                <div style="border-top:1px solid var(--border); padding-top:30px;">
+                    <p style="text-align:center; color:var(--text-mid); font-size:0.8rem; margin-bottom:20px; text-transform:uppercase; letter-spacing:2px;">Prendre une décision</p>
+                    <form action="/admin/status/<%= app.userId %>" method="POST" style="display:flex; gap:15px;">
+                        <button name="status" value="accepte" class="btn" style="flex:2; height:50px; font-weight:bold;">ACCEPTER</button>
+                        <button name="status" value="refuse" class="btn" style="flex:2; height:50px; background:#333; color:white!important; font-weight:bold;">REFUSER</button>
+                        <button name="status" value="revision" class="btn btn-outline" style="flex:1; height:50px;">RÉVISION</button>
+                    </form>
+                </div>
+            <% } %>
+        </div>
+    </div>
+
+    <script>
+    function confirmDeletion(userId) {
+        // Fenêtre de confirmation avec choix
+        const reset = confirm("Voulez-vous également RÉINITIALISER le compteur de tentatives de cet utilisateur ?\n\nOK = Supprimer TOUT (Compteur à 0)\nAnnuler = Supprimer UNIQUEMENT ce dossier (Garder l'historique)");
+        
+        // Création dynamique du formulaire pour envoyer la requête POST
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '/admin/delete/' + userId;
+
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'resetAttempts';
+        input.value = reset ? 'true' : 'false';
+
+        form.appendChild(input);
+        document.body.appendChild(form);
+        form.submit();
+    }
+    </script>
+
+    <footer style="text-align: center; padding: 40px; color: var(--gold-dark); font-size: 0.7rem; letter-spacing: 2px;">
+        &copy; <%= new Date().getFullYear() %> COLLÈGE PRIVÉ PANAME SUD - ADMINISTRATION
+    </footer>
+</body>
+</html>

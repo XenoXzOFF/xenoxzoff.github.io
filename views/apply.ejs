@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Postuler | Paname Sud</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <%- include('partials/nav') %>
+
+    <div class="container animate-in">
+        <div class="hero-container" style="text-align: center; margin-bottom: 30px;">
+            <p class="hero-subtitle-elite">Rejoignez nos effectifs</p>
+            <h1 class="hero-title">FORMULAIRE DE CANDIDATURE</h1>
+        </div>
+
+        <div class="main-card">
+            <form action="/apply" method="POST">
+                <div class="form-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="form-group">
+                        <label class="form-label">Nom Prénom (RP)</label>
+                        <input type="text" name="rpName" class="form-input" placeholder="ex: Jean Castex" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Poste souhaité</label>
+                        <select name="posteId" class="form-input" required>
+                            <option value="" disabled selected>Choisissez un poste disponible...</option>
+                            <% for (const [id, info] of Object.entries(rolesStatus)) { %>
+                                <% if (!info.isFull) { %>
+                                    <option value="<%= id %>">
+                                        <%= info.label %> 
+                                        (<%= info.current %> / <%= info.quota === Infinity ? '∞' : info.quota %>)
+                                    </option>
+                                <% } else { %>
+                                    <option value="<%= id %>" disabled style="color: #666;">
+                                        <%= info.label %> (COMPLET)
+                                    </option>
+                                <% } %>
+                            <% } %>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 20px;">
+                    <label class="form-label">Âge (HRP)</label>
+                    <input type="number" name="age" class="form-input" required min="13" max="99">
+                </div>
+
+                <div class="form-group" style="margin-top: 20px;">
+                    <label class="form-label">Motivations & Expériences</label>
+                    <textarea name="motivations" class="form-input" style="height: 150px; resize: none;" placeholder="Décrivez votre parcours et vos envies..." required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 30px; padding: 15px;">
+                    TRANSMETTRE LE DOSSIER
+                </button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
