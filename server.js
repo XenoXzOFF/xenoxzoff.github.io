@@ -8,19 +8,28 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
+
+/**
+ * CONFIGURATION DU CHEMIN DATABASE
+ * Si tu remets le .gitignore et un volume Fly, change path.join(__dirname...) par '/data/database.json'
+ */
 const dbPath = path.join(__dirname, 'database.json');
 
 // --- CONFIGURATION DU BOT DISCORD ---
 const client = new Client({ 
     intents: [
         GatewayIntentBits.Guilds, 
-        GatewayIntentBits.GuildMembers, 
+        GatewayIntentBits.GuildMembers, // INDISPENSABLE pour l'organigramme
         GatewayIntentBits.DirectMessages
     ],
     partials: [Partials.Channel] 
 });
 
-client.on('clientReady', () => console.log(`Bot Elite connecté : ${client.user.tag}`));
+// Correction de l'événement (c'est 'ready' et non 'clientReady')
+client.on('ready', () => {
+    console.log(`✅ Bot Elite connecté : ${client.user.tag}`);
+});
+
 client.login(process.env.DISCORD_TOKEN);
 
 // --- HELPERS BASE DE DONNÉES ---
@@ -43,7 +52,6 @@ async function sendLog(title, desc, color = 0xc5a059) {
     } catch (e) { console.log("Erreur Log Discord : " + e.message); }
 }
 
-// Confirmation simple à l'envoi
 async function sendConfirmMP(userId, posteLabel) {
     try {
         const user = await client.users.fetch(userId);
@@ -54,10 +62,9 @@ async function sendConfirmMP(userId, posteLabel) {
             .setFooter({ text: "Collège Privé Paname Sud" })
             .setTimestamp();
         await user.send({ embeds: [embed] });
-    } catch (e) { console.log("MP impossible (fermés) pour " + userId); }
+    } catch (e) { console.log("MP impossible pour " + userId); }
 }
 
-// MP de décision
 async function sendResultMP(userId, status) {
     try {
         const user = await client.users.fetch(userId);
@@ -75,15 +82,22 @@ async function sendResultMP(userId, status) {
             .setTimestamp();
             
         await user.send({ embeds: [embed] });
-    } catch (e) { console.log("MP impossible (fermés) pour " + userId); }
+    } catch (e) { console.log("MP impossible pour " + userId); }
 }
 
 // --- MIDDLEWARES ---
 app.set('view engine', 'ejs');
+app.set('trust proxy', 1); // CRUCIAL : Pour que Fly.io gère bien le HTTPS avec Discord
 app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(session({ secret: 'ps_ultra_secret', resave: false, saveUninitialized: false }));
+app.use(session({ 
+    secret: 'ps_ultra_secret', 
+    resave: false, 
+    saveUninitialized: false,
+    cookie: { secure: false } // Reste sur false tant qu'on n'a pas forcé le Full SSL partout
+}));
+
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -131,10 +145,10 @@ app.get('/apply', async (req, res) => {
     try {
         const db = getDB();
         const guild = await client.guilds.fetch(process.env.GUILD_ID);
+        // On fetch tous les membres pour avoir des compteurs à jour
         const allMembers = await guild.members.fetch();
         const rolesStatus = {};
 
-        // Utilisation stricte des quotas du JSON
         if (db.quotas) {
             for (const [id, info] of Object.entries(db.quotas)) {
                 const count = allMembers.filter(m => m.roles.cache.has(id)).size;
@@ -172,9 +186,7 @@ app.post('/apply', async (req, res) => {
     db.applications.push(newApp);
     saveDB(db);
 
-    // Envoi de la confirmation simple
     await sendConfirmMP(req.user.id, posteName);
-
     sendLog("📄 Nouvelle Candidature", `**Nom RP :** ${req.body.rpName}\n**Poste :** ${posteName}`);
     res.redirect('/dashboard');
 });
@@ -183,14 +195,13 @@ app.get('/membres', async (req, res) => {
     try {
         const db = getDB();
         const guild = await client.guilds.fetch(process.env.GUILD_ID);
+        // CRUCIAL : fetch() sans arguments récupère TOUT le serveur
         const allMembers = await guild.members.fetch();
         const effectif = {};
 
         if (db.quotas) {
             for (const [id, info] of Object.entries(db.quotas)) {
-                // On vérifie si le rôle existe vraiment sur le serveur avant de filtrer
                 const roleExists = guild.roles.cache.has(id);
-                
                 if (roleExists) {
                     const users = allMembers.filter(m => m.roles.cache.has(id));
                     effectif[id] = { 
@@ -199,21 +210,18 @@ app.get('/membres', async (req, res) => {
                         membres: users.map(u => u.displayName) 
                     };
                 } else {
-                    // Si le rôle n'existe pas, on met une liste vide pour éviter le crash
-                    effectif[id] = { label: info.name + " (Rôle introuvable)", quota: info.max, membres: [] };
-                    console.error(`Attention : Le rôle ID ${id} n'existe pas sur Discord.`);
+                    effectif[id] = { label: info.name + " (Rôle absent)", quota: info.max, membres: [] };
                 }
             }
         }
         res.render('membres', { effectif });
     } catch (e) { 
         console.error("Erreur page membres :", e);
-        res.status(500).send("Erreur lors du chargement de l'organigramme. Vérifiez les IDs des rôles dans database.json.");
+        res.status(500).send("Erreur de chargement de l'organigramme.");
     }
 });
 
 // --- ADMIN ---
-
 app.get('/admin', (req, res) => {
     if (!req.user?.isAdmin) return res.redirect('/');
     res.render('admin', { applications: getDB().applications });
@@ -237,9 +245,7 @@ app.post('/admin/status/:userId', async (req, res) => {
         db.applications[appIdx].updatedAt = now;
         db.applications[appIdx].history.push({ action: `Statut : ${req.body.status}`, date: now, by: req.user.username });
         saveDB(db);
-        
         await sendResultMP(req.params.userId, req.body.status);
-        
         sendLog("⚖️ Mise à jour", `Dossier de **${db.applications[appIdx].rpName}** passé en **${req.body.status}**`);
     }
     res.redirect('/admin/view/' + req.params.userId);
@@ -254,7 +260,6 @@ app.post('/admin/delete/:userId', (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-
 app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Serveur Elite opérationnel sur le port ${PORT}`);
+    console.log(`🚀 Serveur opérationnel sur le port ${PORT}`);
 });
