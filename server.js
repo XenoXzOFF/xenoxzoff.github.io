@@ -185,16 +185,31 @@ app.get('/membres', async (req, res) => {
         const guild = await client.guilds.fetch(process.env.GUILD_ID);
         const allMembers = await guild.members.fetch();
         const effectif = {};
-        for (const [id, info] of Object.entries(db.quotas)) {
-            const users = allMembers.filter(m => m.roles.cache.has(id));
-            effectif[id] = { 
-                label: info.name, 
-                quota: info.max === "Infini" ? Infinity : info.max, 
-                membres: users.map(u => u.displayName) 
-            };
+
+        if (db.quotas) {
+            for (const [id, info] of Object.entries(db.quotas)) {
+                // On vérifie si le rôle existe vraiment sur le serveur avant de filtrer
+                const roleExists = guild.roles.cache.has(id);
+                
+                if (roleExists) {
+                    const users = allMembers.filter(m => m.roles.cache.has(id));
+                    effectif[id] = { 
+                        label: info.name, 
+                        quota: info.max, 
+                        membres: users.map(u => u.displayName) 
+                    };
+                } else {
+                    // Si le rôle n'existe pas, on met une liste vide pour éviter le crash
+                    effectif[id] = { label: info.name + " (Rôle introuvable)", quota: info.max, membres: [] };
+                    console.error(`Attention : Le rôle ID ${id} n'existe pas sur Discord.`);
+                }
+            }
         }
         res.render('membres', { effectif });
-    } catch (e) { res.status(500).send("Erreur."); }
+    } catch (e) { 
+        console.error("Erreur page membres :", e);
+        res.status(500).send("Erreur lors du chargement de l'organigramme. Vérifiez les IDs des rôles dans database.json.");
+    }
 });
 
 // --- ADMIN ---
