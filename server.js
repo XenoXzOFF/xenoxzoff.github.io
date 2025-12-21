@@ -282,7 +282,7 @@ app.post('/admin/maintenance', (req, res) => {
     res.redirect('/admin');
 });
 
-app.get('/admin/view/:userId', (req, res) => {
+app.get('/view/:userId', (req, res) => {
     if (!req.isAuthenticated()) return res.redirect('/');
 
     // Autoriser l'accès si c'est un admin OU si l'utilisateur consulte son propre dossier
@@ -309,7 +309,7 @@ app.post('/admin/status/:userId', async (req, res) => {
         await sendResultMP(req.params.userId, req.body.status);
         sendLog("⚖️ Mise à jour", `Dossier de **${db.applications[appIdx].rpName}** : **${req.body.status}**`);
     }
-    res.redirect('/admin/view/' + req.params.userId);
+    res.redirect('/view/' + req.params.userId);
 });
 
 app.post('/admin/delete/:userId', (req, res) => {
