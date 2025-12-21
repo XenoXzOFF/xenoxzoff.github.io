@@ -50,7 +50,7 @@ async function sendLog(title, desc, color = 0xc5a059) {
             const embed = new EmbedBuilder().setTitle(title).setDescription(desc).setColor(color).setTimestamp();
             await channel.send({ embeds: [embed] });
         }
-    } catch (e) { console.log("Erreur Log Discord : " + e.message); }
+    } catch (e) { console.error("❌ Erreur Log Discord :", e); }
 }
 
 async function sendConfirmMP(userId, posteLabel) {
@@ -61,7 +61,7 @@ async function sendConfirmMP(userId, posteLabel) {
             .setDescription(`Votre dossier pour le poste de **${posteLabel}** a bien été réceptionné par nos services.`)
             .setColor(0xc5a059).setTimestamp();
         await user.send({ embeds: [embed] });
-    } catch (e) { console.log("MP impossible pour " + userId); }
+    } catch (e) { console.error(`❌ MP impossible pour ${userId}:`, e); }
 }
 
 async function sendResultMP(userId, status) {
@@ -74,7 +74,7 @@ async function sendResultMP(userId, status) {
         }[status] || { txt: "mis à jour.", col: 0xc5a059 };
         const embed = new EmbedBuilder().setTitle("⚜️ Mise à jour").setDescription(`Votre dossier a été **${config.txt}**`).setColor(config.col).setTimestamp();
         await user.send({ embeds: [embed] });
-    } catch (e) { console.log("MP impossible pour " + userId); }
+    } catch (e) { console.error(`❌ MP impossible pour ${userId}:`, e); }
 }
 
 // --- MIDDLEWARES ---
@@ -174,7 +174,7 @@ app.post('/apply', async (req, res) => {
     if (!req.isAuthenticated()) return res.redirect('/');
     const db = getDB();
     const roleInfo = db.quotas[req.body.posteId];
-    const now = new Date().toLocaleString('fr-FR');
+    const now = new Date().toISOString();
     const posteName = roleInfo ? roleInfo.name : "Inconnu";
     const newApp = {
         userId: req.user.id, username: req.user.username, rpName: req.body.rpName,
@@ -242,7 +242,7 @@ app.post('/admin/status/:userId', async (req, res) => {
     const db = getDB();
     const appIdx = db.applications.findLastIndex(a => a.userId === req.params.userId);
     if (appIdx !== -1) {
-        const now = new Date().toLocaleString('fr-FR');
+        const now = new Date().toISOString();
         db.applications[appIdx].status = req.body.status;
         db.applications[appIdx].updatedAt = now;
         db.applications[appIdx].history.push({ action: `Statut : ${req.body.status}`, date: now, by: req.user.username });
