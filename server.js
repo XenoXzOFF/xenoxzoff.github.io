@@ -281,10 +281,16 @@ app.post('/admin/maintenance', (req, res) => {
 });
 
 app.get('/admin/view/:userId', (req, res) => {
-    if (!req.user?.isAdmin) return res.redirect('/');
+    if (!req.isAuthenticated()) return res.redirect('/');
+
+    // Autoriser l'accès si c'est un admin OU si l'utilisateur consulte son propre dossier
+    if (!req.user.isAdmin && req.user.id !== req.params.userId) {
+        return res.redirect('/dashboard');
+    }
+
     const db = getDB();
     const userApps = db.applications.filter(a => a.userId === req.params.userId);
-    if (userApps.length === 0) return res.redirect('/admin');
+    if (userApps.length === 0) return res.redirect(req.user.isAdmin ? '/admin' : '/dashboard');
     res.render('view_app', { app: userApps[userApps.length - 1], attempts: userApps.length });
 });
 
