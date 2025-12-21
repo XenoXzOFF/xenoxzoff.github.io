@@ -90,7 +90,7 @@ async function sendResultMP(userId, status) {
             revision: { txt: "mis en cours de révision.", col: 0xf48f0c }
         }[status] || { txt: "mis à jour.", col: 0xf48f0c };
 // V1        const embed = new EmbedBuilder().setTitle("⚜️ Mise à jour").setDescription(`Votre dossier a été **${config.txt}**`).setColor(config.col).setTimestamp();
-            const embed = new EmbedBuilder().setColor(0xf48f0c).setTitle("<:partiel:1450921453238096094> Votre formulaire écrit a été traité").setDescription(`Connectez-vous au dashboard afin de prendre connaissance du résultat.\n\n🔗 [Cliquez ici pour accéder au Dashboard](https://clg.site.paname-75.fr/dashboard)`).setColor(config.col).setTimestamp();
+            const embed = new EmbedBuilder().setTitle("<:partiel:1450921453238096094> Votre formulaire écrit a été traité").setDescription(`Connectez-vous au dashboard afin de prendre connaissance du résultat.\n\n🔗 [Cliquez ici pour accéder au Dashboard](https://clg.site.paname-75.fr/dashboard)`).setColor(config.col).setTimestamp();
         await user.send({ embeds: [embed] });
     } catch (e) { console.error(`❌ MP impossible pour ${userId}:`, e); }
 }
