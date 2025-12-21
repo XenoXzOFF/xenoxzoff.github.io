@@ -73,8 +73,9 @@ async function sendConfirmMP(userId, posteLabel) {
     try {
         const user = await client.users.fetch(userId);
         const embed = new EmbedBuilder()
-            .setTitle("⚜️ Candidature Envoyée")
-            .setDescription(`Votre dossier pour le poste de **${posteLabel}** a bien été réceptionné par nos services.`)
+            .setTitle("<:on:1450921440407716051> Votre candidature écrite a bien été envoyée.")
+// V1            .setDescription(`Votre dossier pour le poste de **${posteLabel}** a bien été réceptionné par nos services.`)
+            .setDescription('Une fois le formulaire envoyé, le délai de réponse est d\'environ 48 heures.\nPassé ce délai, si vous n\'avez aucune réponse, vous pouvez demander à un RH.\n⚠️ Toute relance avant ce délai entraînera une sanction ou un refus immédiat.')
             .setColor(0xc5a059).setTimestamp();
         await user.send({ embeds: [embed] });
     } catch (e) { console.error(`❌ MP impossible pour ${userId}:`, e); }
@@ -88,7 +89,8 @@ async function sendResultMP(userId, status) {
             refuse: { txt: "refusé pour le moment.", col: 0xff4757 },
             revision: { txt: "mis en cours de révision.", col: 0xeccc68 }
         }[status] || { txt: "mis à jour.", col: 0xc5a059 };
-        const embed = new EmbedBuilder().setTitle("⚜️ Mise à jour").setDescription(`Votre dossier a été **${config.txt}**`).setColor(config.col).setTimestamp();
+// V1        const embed = new EmbedBuilder().setTitle("⚜️ Mise à jour").setDescription(`Votre dossier a été **${config.txt}**`).setColor(config.col).setTimestamp();
+            const embed = new EmbedBuilder().setTitle("<:partiel:1450921453238096094> Votre formulaire écrit a été traité").setDescription(`Connectez-vous au dashboard afin de prendre connaissance du résultat.\n🔗 [Cliquez ici pour accéder au Dashboard](https://clg.site.paname-75.fr/dashboard)`).setColor(config.col).setTimestamp();
         await user.send({ embeds: [embed] });
     } catch (e) { console.error(`❌ MP impossible pour ${userId}:`, e); }
 }
