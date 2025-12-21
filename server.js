@@ -215,7 +215,7 @@ app.post('/apply', async (req, res) => {
                 + `**🎭 Identité RP**\n`
                 + `> Nom : \`${fullRpName}\`\n`
                 + `> Âge : \`${req.body.ageRP}\` ans\n`
-                + `> Date de Naissance : \`${req.body.dateNaissanceRP}\`\n`
+                + `> Date de Naissance : \`${new Date(req.body.dateNaissanceRP).toLocaleDateString('fr-FR')}\`\n`
                 + `> Ville de Naissance : \`${req.body.villeNaissanceRP}\`\n`
                 + `> Département : \`${req.body.deptNaissanceRP}\`\n`
                 + `> Code Postal : \`${req.body.cpNaissanceRP}\`\n\n`

@@ -31,7 +31,7 @@
                         <tr>
                             <td style="color: white; font-weight: bold;"><%= app.username %></td>
                             <td><%= app.posteLabel %></td>
-                            <td><%= app.createdAt %></td>
+                            <td><%= new Date(app.createdAt).toLocaleString('fr-FR', { dateStyle: 'short', timeStyle: 'short', timeZone: 'Europe/Paris' }) %></td>
                             <td>
                                 <span class="status-badge status-<%= app.status %>">
                                     <%= app.status %>
