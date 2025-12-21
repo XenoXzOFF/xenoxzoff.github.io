@@ -73,9 +73,19 @@
             <!-- Section Candidature -->
             <div style="margin-bottom: 40px;">
                 <h2 style="font-family: 'Montserrat'; color: var(--gold); border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 20px; font-size: 1rem; text-transform: uppercase; letter-spacing: 2px;">Dossier de Candidature</h2>
-                <div style="margin-bottom: 25px;">
-                    <label style="color:var(--gold); font-size:0.7rem; text-transform:uppercase; letter-spacing:1px;">Poste Visé</label>
-                    <p style="font-size:1.1rem; font-weight:bold; margin-top:5px;"><%= app.posteLabel %></p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; margin-bottom: 25px;">
+                    <div>
+                        <label style="color:var(--gold); font-size:0.7rem; text-transform:uppercase; letter-spacing:1px;">Poste Visé</label>
+                        <p style="font-size:1.1rem; font-weight:bold; margin-top:5px;"><%= app.posteLabel %></p>
+                    </div>
+                    <div>
+                        <label style="color:var(--gold); font-size:0.7rem; text-transform:uppercase; letter-spacing:1px;">Date d'envoi</label>
+                        <p style="font-size:1.1rem; font-weight:bold; margin-top:5px;"><%= new Date(app.createdAt).toLocaleString('fr-FR', { dateStyle: 'long', timeStyle: 'short', timeZone: 'Europe/Paris' }) %></p>
+                    </div>
+                    <div>
+                        <label style="color:var(--gold); font-size:0.7rem; text-transform:uppercase; letter-spacing:1px;">Dernière mise à jour</label>
+                        <p style="font-size:1.1rem; font-weight:bold; margin-top:5px;"><%= new Date(app.updatedAt).toLocaleString('fr-FR', { dateStyle: 'long', timeStyle: 'short', timeZone: 'Europe/Paris' }) %></p>
+                    </div>
                 </div>
                 <div style="margin-bottom: 25px;">
                     <label style="color:var(--gold); font-size:0.7rem; text-transform:uppercase; letter-spacing:1px; display:block; margin-bottom:10px;">Motivations</label>
