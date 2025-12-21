@@ -167,8 +167,15 @@ app.get('/dashboard', (req, res) => {
 
 app.get('/apply', async (req, res) => {
     if (!req.isAuthenticated()) return res.redirect('/auth/discord');
+
+    const db = getDB();
+    const lastApp = db.applications.findLast(a => a.userId === req.user.id);
+    
+    // Si l'utilisateur a déjà une candidature en cours de révision, on le redirige.
+    if (lastApp && lastApp.status === 'revision') {
+        return res.redirect('/dashboard');
+    }
     try {
-        const db = getDB();
         const guild = await client.guilds.fetch(process.env.GUILD_ID);
         const allMembers = await getCachedMembers(guild);
         const rolesStatus = {};
@@ -189,6 +196,13 @@ app.get('/apply', async (req, res) => {
 app.post('/apply', async (req, res) => {
     if (!req.isAuthenticated()) return res.redirect('/');
     const db = getDB();
+
+    const lastApp = db.applications.findLast(a => a.userId === req.user.id);
+    // Sécurité côté serveur pour empêcher la soumission multiple
+    if (lastApp && lastApp.status === 'revision') {
+        return res.redirect('/dashboard');
+    }
+
     const roleInfo = db.quotas[req.body.posteId];
     const now = new Date().toISOString();
     const posteName = roleInfo ? roleInfo.name : "Inconnu";
@@ -293,7 +307,22 @@ app.post('/admin/status/:userId', async (req, res) => {
 app.post('/admin/delete/:userId', (req, res) => {
     if (!req.user?.isAdmin) return res.redirect('/');
     const db = getDB();
-    db.applications = db.applications.filter(a => a.userId !== req.params.userId);
+    const reset = req.body.resetAttempts === 'true';
+
+    if (reset) {
+        // Supprimer toutes les candidatures de l'utilisateur
+        const userToDelete = db.applications.find(a => a.userId === req.params.userId);
+        db.applications = db.applications.filter(a => a.userId !== req.params.userId);
+        sendLog("🗑️ Purge Dossiers", `Toutes les candidatures de **${userToDelete?.username || 'Utilisateur Inconnu'}** ont été supprimées.`);
+    } else {
+        // Supprimer uniquement la dernière candidature
+        const appIdx = db.applications.findLastIndex(a => a.userId === req.params.userId);
+        if (appIdx !== -1) {
+            const appName = db.applications[appIdx].rpName;
+            db.applications.splice(appIdx, 1);
+            sendLog("🗑️ Suppression Dossier", `Le dernier dossier de **${appName}** a été supprimé.`);
+        }
+    }
     saveDB(db);
     res.redirect('/admin');
 });
