@@ -24,30 +24,50 @@
                 <% } %>
             </div>
 
-            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:25px; margin-bottom:40px;">
-                <div class="info-group">
-                    <label style="color:var(--gold); font-size:0.7rem; text-transform:uppercase; letter-spacing:1px;">Nom RP déclaré</label>
-                    <p style="font-size:1.1rem; font-weight:bold; margin-top:5px;"><%= app.rpName %></p>
-                </div>
-                <div class="info-group">
-                    <label style="color:var(--gold); font-size:0.7rem; text-transform:uppercase; letter-spacing:1px;">Poste visé</label>
-                    <p style="font-size:1.1rem; font-weight:bold; margin-top:5px;"><%= app.posteLabel %></p>
-                </div>
-                <div class="info-group">
-                    <label style="color:var(--gold); font-size:0.7rem; text-transform:uppercase; letter-spacing:1px;">Âge</label>
-                    <p style="font-size:1.1rem; font-weight:bold; margin-top:5px;"><%= app.age %> ans</p>
-                </div>
-                <div class="info-group">
-                    <label style="color:var(--gold); font-size:0.7rem; text-transform:uppercase; letter-spacing:1px;">Tentatives totales</label>
-                    <p style="font-size:1.1rem; font-weight:bold; margin-top:5px;">#<%= attempts %></p>
+            <!-- Section Identité -->
+            <div style="margin-bottom: 40px;">
+                <h2 style="font-family: 'Montserrat'; color: var(--gold); border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 20px; font-size: 1rem; text-transform: uppercase; letter-spacing: 2px;">Identité</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px;">
+                    <div>
+                        <label style="color:var(--gold); font-size:0.7rem; text-transform:uppercase; letter-spacing:1px;">Prénom IRL</label>
+                        <p style="font-size:1.1rem; font-weight:bold; margin-top:5px;"><%= app.prenomIRL %></p>
+                    </div>
+                    <div>
+                        <label style="color:var(--gold); font-size:0.7rem; text-transform:uppercase; letter-spacing:1px;">Âge IRL</label>
+                        <p style="font-size:1.1rem; font-weight:bold; margin-top:5px;"><%= app.ageIRL %> ans</p>
+                    </div>
+                    <div>
+                        <label style="color:var(--gold); font-size:0.7rem; text-transform:uppercase; letter-spacing:1px;">Prénom & Nom RP</label>
+                        <p style="font-size:1.1rem; font-weight:bold; margin-top:5px;"><%= app.rpName %></p>
+                    </div>
+                    <div>
+                        <label style="color:var(--gold); font-size:0.7rem; text-transform:uppercase; letter-spacing:1px;">Âge RP</label>
+                        <p style="font-size:1.1rem; font-weight:bold; margin-top:5px;"><%= app.ageRP %> ans</p>
+                    </div>
+                    <div style="grid-column: span 2;">
+                        <label style="color:var(--gold); font-size:0.7rem; text-transform:uppercase; letter-spacing:1px;">Naissance RP</label>
+                        <p style="font-size:1.1rem; font-weight:bold; margin-top:5px;"><%= app.dateNaissanceRP %> à <%= app.villeNaissanceRP %> (<%= app.cpNaissanceRP %>), <%= app.deptNaissanceRP %></p>
+                    </div>
                 </div>
             </div>
 
-            <div style="margin-bottom:40px;">
-                <label style="color:var(--gold); font-size:0.7rem; text-transform:uppercase; letter-spacing:1px; display:block; margin-bottom:10px;">Lettre de Motivation</label>
-                <div style="background:rgba(255,255,255,0.03); padding:25px; border-radius:12px; border:1px solid var(--border); line-height:1.8; color:#eee; white-space: pre-wrap;">
-                    <%= app.motivations %>
+            <!-- Section Candidature -->
+            <div style="margin-bottom: 40px;">
+                <h2 style="font-family: 'Montserrat'; color: var(--gold); border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 20px; font-size: 1rem; text-transform: uppercase; letter-spacing: 2px;">Candidature</h2>
+                <div style="margin-bottom: 25px;">
+                    <label style="color:var(--gold); font-size:0.7rem; text-transform:uppercase; letter-spacing:1px;">Poste Visé</label>
+                    <p style="font-size:1.1rem; font-weight:bold; margin-top:5px;"><%= app.posteLabel %></p>
                 </div>
+                <div style="margin-bottom: 25px;">
+                    <label style="color:var(--gold); font-size:0.7rem; text-transform:uppercase; letter-spacing:1px; display:block; margin-bottom:10px;">Motivations</label>
+                    <div style="background:rgba(255,255,255,0.03); padding:25px; border-radius:12px; border:1px solid var(--border); line-height:1.8; color:#eee; white-space: pre-wrap;"><%= app.motivations %></div>
+                </div>
+                <% if (app.apport) { %>
+                    <div>
+                        <label style="color:var(--gold); font-size:0.7rem; text-transform:uppercase; letter-spacing:1px; display:block; margin-bottom:10px;">Apport à l'établissement</label>
+                        <div style="background:rgba(255,255,255,0.03); padding:25px; border-radius:12px; border:1px solid var(--border); line-height:1.8; color:#eee; white-space: pre-wrap;"><%= app.apport %></div>
+                    </div>
+                <% } %>
             </div>
 
             <div style="margin-bottom:40px;">
