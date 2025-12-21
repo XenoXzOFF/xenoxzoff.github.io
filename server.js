@@ -192,16 +192,30 @@ app.post('/apply', async (req, res) => {
     const roleInfo = db.quotas[req.body.posteId];
     const now = new Date().toISOString();
     const posteName = roleInfo ? roleInfo.name : "Inconnu";
+    const fullRpName = `${req.body.prenomRP} ${req.body.nomRP}`;
+
     const newApp = {
-        userId: req.user.id, username: req.user.username, rpName: req.body.rpName,
+        userId: req.user.id, username: req.user.username, rpName: fullRpName,
         posteId: req.body.posteId, posteLabel: posteName,
-        age: req.body.age, motivations: req.body.motivations, status: 'revision',
+        prenomIRL: req.body.prenomIRL, ageIRL: req.body.ageIRL,
+        prenomRP: req.body.prenomRP, nomRP: req.body.nomRP, ageRP: req.body.ageRP,
+        dateNaissanceRP: req.body.dateNaissanceRP, villeNaissanceRP: req.body.villeNaissanceRP,
+        deptNaissanceRP: req.body.deptNaissanceRP, cpNaissanceRP: req.body.cpNaissanceRP,
+        motivations: req.body.motivations, apport: req.body.apport || "",
+        status: 'revision',
         createdAt: now, updatedAt: now, history: [{ action: "Soumission", date: now, by: "Système" }]
     };
     db.applications.push(newApp);
     saveDB(db);
     await sendConfirmMP(req.user.id, posteName);
-    sendLog("📄 Nouvelle Candidature", `**Nom RP :** ${req.body.rpName}\n**Âge :** ${req.body.age} ans\n**Poste :** ${posteName}\n\n**Motivations :**\n${req.body.motivations}`);
+    
+    let logDesc = `**👤 Identité IRL**\nPrénom : ${req.body.prenomIRL} | Âge : ${req.body.ageIRL} ans\n\n`;
+    logDesc += `**🎭 Identité RP**\nNom : ${fullRpName} | Âge : ${req.body.ageRP} ans\n`;
+    logDesc += `Naissance : ${req.body.dateNaissanceRP} à ${req.body.villeNaissanceRP} (${req.body.cpNaissanceRP}, ${req.body.deptNaissanceRP})\n\n`;
+    logDesc += `**📂 Poste :** ${posteName}\n\n**📝 Motivations :**\n${req.body.motivations}`;
+    if (req.body.apport) logDesc += `\n\n**🤝 Apport :**\n${req.body.apport}`;
+
+    sendLog("📄 Nouvelle Candidature", logDesc);
     res.redirect('/dashboard');
 });
 
