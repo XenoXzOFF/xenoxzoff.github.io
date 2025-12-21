@@ -3,133 +3,107 @@
   "quotas": {
     "1371881756290056302": {
       "name": "Chef d'établissement",
-      "max": 1,
-      "count": 1
+      "max": 1
     },
     "1371881636509122560": {
       "name": "Chef d'établissement Adjoint",
-      "max": 1,
-      "count": 1
+      "max": 1
     },
     "1371881619488505877": {
       "name": "CPE",
-      "max": 2,
-      "count": 2
+      "max": 2
     },
     "1449080286070706328": {
       "name": "Chef Vie Scolaire",
-      "max": 1,
-      "count": 1
+      "max": 1
     },
     "1371881476370726984": {
       "name": "Vie Scolaire",
-      "max": 5,
-      "count": 0
+      "max": 5
     },
     "1371880988610793483": {
       "name": "Prof de français",
-      "max": "Infini",
-      "count": 0
+      "max": "Infini"
     },
     "1371881013109723256": {
       "name": "Prof de Anglais",
-      "max": "Infini",
-      "count": 0
+      "max": "Infini"
     },
     "1371881025369800724": {
       "name": "Prof de Allemand",
-      "max": "Infini",
-      "count": 0
+      "max": "Infini"
     },
     "1371881038699302923": {
       "name": "Prof de Espagnol",
-      "max": "Infini",
-      "count": 0
+      "max": "Infini"
     },
     "1371881071091777729": {
       "name": "Prof de Physique Chimie",
-      "max": "Infini",
-      "count": 0
+      "max": "Infini"
     },
     "1371881096257601587": {
       "name": "Prof de SVT",
-      "max": "Infini",
-      "count": 0
+      "max": "Infini"
     },
     "1371881118688874496": {
       "name": "Prof de Histoire",
-      "max": "Infini",
-      "count": 0
+      "max": "Infini"
     },
     "1371881186397393050": {
       "name": "Prof de Maths",
-      "max": "Infini",
-      "count": 0
+      "max": "Infini"
     },
     "1395078444915888179": {
       "name": "Prof de Techno",
-      "max": "Infini",
-      "count": 0
+      "max": "Infini"
     },
     "1444380539753726143": {
       "name": "Prof de EPS",
-      "max": "Infini",
-      "count": 0
+      "max": "Infini"
     },
     "1444380832579195021": {
       "name": "Prof de Musique",
-      "max": "Infini",
-      "count": 0
+      "max": "Infini"
     },
     "1444380905413017640": {
       "name": "Prof de Art Plastique",
-      "max": "Infini",
-      "count": 0
+      "max": "Infini"
     },
     "1371882464850481285": {
       "name": "Psychologue d'éducation",
-      "max": "Infini",
-      "count": 0
+      "max": "Infini"
     },
     "1371881894014091405": {
       "name": "Conseiller/ère d'éducation",
-      "max": "Infini",
-      "count": 0
+      "max": "Infini"
     },
     "1371882019017064529": {
       "name": "Infirmier/ère",
-      "max": "Infini",
-      "count": 0
+      "max": "Infini"
     },
     "1371882350169817138": {
       "name": "AESH",
-      "max": "Infini",
-      "count": 0
+      "max": "Infini"
     },
     "1371880953600807053": {
       "name": "Accueil",
-      "max": "Infini",
-      "count": 0
+      "max": "Infini"
     },
     "1371879240454115559": {
       "name": "3e",
-      "max": "Infini",
-      "count": 0
+      "max": "Infini"
     },
     "1371879168551293019": {
       "name": "4e",
-      "max": "Infini",
-      "count": 0
+      "max": "Infini"
     },
     "1371879158119927818": {
       "name": "5e",
-      "max": "Infini",
-      "count": 0
+      "max": "Infini"
     },
     "1371878984509292554": {
       "name": "6e",
-      "max": "Infini",
-      "count": 0
+      "max": "Infini"
     }
   }
 }
