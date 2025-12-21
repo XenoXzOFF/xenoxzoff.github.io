@@ -16,40 +16,84 @@
 
         <div class="main-card">
             <form action="/apply" method="POST">
-                <div class="form-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <!-- Identité IRL -->
+                <h3 style="color: var(--gold); border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 20px; font-size: 1rem; text-transform: uppercase; letter-spacing: 2px;">Identité IRL</h3>
+                <div class="form-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px;">
                     <div class="form-group">
-                        <label class="form-label">Nom Prénom (RP)</label>
-                        <input type="text" name="rpName" class="form-input" placeholder="ex: Jean Castex" required>
+                        <label class="form-label">Prénom IRL</label>
+                        <input type="text" name="prenomIRL" class="form-input" required>
                     </div>
-
                     <div class="form-group">
-                        <label class="form-label">Poste souhaité</label>
-                        <select name="posteId" class="form-input" required>
-                            <option value="" disabled selected>Choisissez un poste disponible...</option>
-                            <% for (const [id, info] of Object.entries(rolesStatus)) { %>
-                                <% if (!info.isFull) { %>
-                                    <option value="<%= id %>">
-                                        <%= info.label %> 
-                                        (<%= info.current %> / <%= info.quota === Infinity ? '∞' : info.quota %>)
-                                    </option>
-                                <% } else { %>
-                                    <option value="<%= id %>" disabled style="color: #666;">
-                                        <%= info.label %> (COMPLET)
-                                    </option>
-                                <% } %>
+                        <label class="form-label">Âge IRL</label>
+                        <input type="number" name="ageIRL" class="form-input" required min="13" max="99">
+                    </div>
+                </div>
+
+                <!-- Identité RP -->
+                <h3 style="color: var(--gold); border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 20px; font-size: 1rem; text-transform: uppercase; letter-spacing: 2px;">Identité RP</h3>
+                <div class="form-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                    <div class="form-group">
+                        <label class="form-label">Prénom RP</label>
+                        <input type="text" name="prenomRP" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Nom RP</label>
+                        <input type="text" name="nomRP" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Âge RP</label>
+                        <input type="number" name="ageRP" class="form-input" required min="10" max="99">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Date de Naissance RP</label>
+                        <input type="date" name="dateNaissanceRP" class="form-input" required>
+                    </div>
+                </div>
+                <div class="form-grid" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 30px;">
+                    <div class="form-group">
+                        <label class="form-label">Ville de Naissance</label>
+                        <input type="text" name="villeNaissanceRP" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Département</label>
+                        <input type="text" name="deptNaissanceRP" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Code Postal</label>
+                        <input type="text" name="cpNaissanceRP" class="form-input" required>
+                    </div>
+                </div>
+
+                <!-- Candidature -->
+                <h3 style="color: var(--gold); border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 20px; font-size: 1rem; text-transform: uppercase; letter-spacing: 2px;">Dossier</h3>
+                
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label class="form-label">Poste souhaité</label>
+                    <select name="posteId" id="posteSelect" class="form-input" required onchange="toggleApport()">
+                        <option value="" disabled selected>Choisissez un poste disponible...</option>
+                        <% for (const [id, info] of Object.entries(rolesStatus)) { %>
+                            <% if (!info.isFull) { %>
+                                <option value="<%= id %>" data-label="<%= info.label %>">
+                                    <%= info.label %> 
+                                    (<%= info.current %> / <%= info.quota === Infinity ? '∞' : info.quota %>)
+                                </option>
+                            <% } else { %>
+                                <option value="<%= id %>" disabled style="color: #666;">
+                                    <%= info.label %> (COMPLET)
+                                </option>
                             <% } %>
-                        </select>
-                    </div>
+                        <% } %>
+                    </select>
                 </div>
 
-                <div class="form-group" style="margin-top: 20px;">
-                    <label class="form-label">Âge (HRP)</label>
-                    <input type="number" name="age" class="form-input" required min="13" max="99">
-                </div>
-
-                <div class="form-group" style="margin-top: 20px;">
-                    <label class="form-label">Motivations & Expériences</label>
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label class="form-label">Pourquoi voulez-vous être inscrit dans le collège ?</label>
                     <textarea name="motivations" class="form-input" style="height: 150px; resize: none;" placeholder="Décrivez votre parcours et vos envies..." required></textarea>
+                </div>
+
+                <div class="form-group" id="apportGroup" style="display:none;">
+                    <label class="form-label">Que pourriez-vous apporter au sein de l'établissement ?</label>
+                    <textarea name="apport" id="apportInput" class="form-input" style="height: 100px; resize: none;" placeholder="Vos compétences, vos projets..."></textarea>
                 </div>
 
                 <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 30px; padding: 15px;">
@@ -58,6 +102,28 @@
             </form>
         </div>
     </div>
+
+    <script>
+    function toggleApport() {
+        const select = document.getElementById('posteSelect');
+        const selectedOption = select.options[select.selectedIndex];
+        const label = selectedOption.getAttribute('data-label') || "";
+        const apportGroup = document.getElementById('apportGroup');
+        const apportInput = document.getElementById('apportInput');
+        
+        // Si le label contient 6e, 5e, 4e, 3e, c'est un élève -> on cache
+        const isStudent = label.includes('6e') || label.includes('5e') || label.includes('4e') || label.includes('3e');
+        
+        if (isStudent) {
+            apportGroup.style.display = 'none';
+            apportInput.required = false;
+            apportInput.value = ""; 
+        } else {
+            apportGroup.style.display = 'block';
+            apportInput.required = true;
+        }
+    }
+    </script>
 </body>
 </html>
 
