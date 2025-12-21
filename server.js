@@ -201,7 +201,7 @@ app.post('/apply', async (req, res) => {
     db.applications.push(newApp);
     saveDB(db);
     await sendConfirmMP(req.user.id, posteName);
-    sendLog("📄 Nouvelle Candidature", `**Nom RP :** ${req.body.rpName}\n**Poste :** ${posteName}`);
+    sendLog("📄 Nouvelle Candidature", `**Nom RP :** ${req.body.rpName}\n**Âge :** ${req.body.age} ans\n**Poste :** ${posteName}\n\n**Motivations :**\n${req.body.motivations}`);
     res.redirect('/dashboard');
 });
 
