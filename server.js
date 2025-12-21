@@ -200,7 +200,10 @@ app.get('/membres', async (req, res) => {
             }
         }
         res.render('membres', { effectif });
-    } catch (e) { res.status(500).send("Erreur organigramme."); }
+    } catch (e) { 
+        console.error("❌ Erreur Organigramme :", e);
+        res.status(500).send("Erreur organigramme."); 
+    }
 });
 
 // --- ADMIN ---
