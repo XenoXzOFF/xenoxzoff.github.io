@@ -51,9 +51,21 @@
                         <label style="color:var(--gold); font-size:0.7rem; text-transform:uppercase; letter-spacing:1px;">Âge RP</label>
                         <p style="font-size:1.1rem; font-weight:bold; margin-top:5px;"><%= app.ageRP %> ans</p>
                     </div>
-                    <div style="grid-column: 1 / -1;">
-                        <label style="color:var(--gold); font-size:0.7rem; text-transform:uppercase; letter-spacing:1px;">Naissance RP</label>
-                        <p style="font-size:1.1rem; font-weight:bold; margin-top:5px;"><%= app.dateNaissanceRP %> à <%= app.villeNaissanceRP %> (<%= app.cpNaissanceRP %>), <%= app.deptNaissanceRP %></p>
+                    <div>
+                        <label style="color:var(--gold); font-size:0.7rem; text-transform:uppercase; letter-spacing:1px;">Date de Naissance</label>
+                        <p style="font-size:1.1rem; font-weight:bold; margin-top:5px;"><%= app.dateNaissanceRP %></p>
+                    </div>
+                    <div>
+                        <label style="color:var(--gold); font-size:0.7rem; text-transform:uppercase; letter-spacing:1px;">Ville de Naissance</label>
+                        <p style="font-size:1.1rem; font-weight:bold; margin-top:5px;"><%= app.villeNaissanceRP %></p>
+                    </div>
+                    <div>
+                        <label style="color:var(--gold); font-size:0.7rem; text-transform:uppercase; letter-spacing:1px;">Département</label>
+                        <p style="font-size:1.1rem; font-weight:bold; margin-top:5px;"><%= app.deptNaissanceRP %></p>
+                    </div>
+                    <div>
+                        <label style="color:var(--gold); font-size:0.7rem; text-transform:uppercase; letter-spacing:1px;">Code Postal</label>
+                        <p style="font-size:1.1rem; font-weight:bold; margin-top:5px;"><%= app.cpNaissanceRP %></p>
                     </div>
                 </div>
             </div>
@@ -84,7 +96,7 @@
                         <% app.history.slice().reverse().forEach(h => { %>
                             <div style="font-size:0.85rem; border-bottom:1px solid rgba(255,255,255,0.05); padding:12px 20px; display:flex; justify-content:space-between; align-items:center;">
                                 <span><strong style="color:var(--gold);"><%= h.action %></strong> par <%= h.by %></span>
-                                <span style="opacity:0.5; font-family:monospace;"><%= h.date %></span>
+                                <span style="opacity:0.5; font-family:monospace;"><%= new Date(h.date).toLocaleString('fr-FR', { dateStyle: 'medium', timeStyle: 'short' }) %></span>
                             </div>
                         <% }) %>
                     <% } else { %>
