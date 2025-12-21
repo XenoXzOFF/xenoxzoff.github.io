@@ -209,10 +209,17 @@ app.post('/apply', async (req, res) => {
     saveDB(db);
     await sendConfirmMP(req.user.id, posteName);
     
-    let logDesc = `**👤 Identité IRL**\nPrénom : ${req.body.prenomIRL} | Âge : ${req.body.ageIRL} ans\n\n`;
-    logDesc += `**🎭 Identité RP**\nNom : ${fullRpName} | Âge : ${req.body.ageRP} ans\n`;
-    logDesc += `Naissance : ${req.body.dateNaissanceRP} à ${req.body.villeNaissanceRP} (${req.body.cpNaissanceRP}, ${req.body.deptNaissanceRP})\n\n`;
-    logDesc += `**📂 Poste :** ${posteName}\n\n**📝 Motivations :**\n${req.body.motivations}`;
+    let logDesc = `**👤 Identité IRL**\n`
+                + `> Prénom : \`${req.body.prenomIRL}\`\n`
+                + `> Âge : \`${req.body.ageIRL}\` ans\n\n`
+                + `**🎭 Identité RP**\n`
+                + `> Nom : \`${fullRpName}\`\n`
+                + `> Âge : \`${req.body.ageRP}\` ans\n`
+                + `> Date de Naissance : \`${req.body.dateNaissanceRP}\`\n`
+                + `> Ville de Naissance : \`${req.body.villeNaissanceRP}\`\n`
+                + `> Département : \`${req.body.deptNaissanceRP}\`\n`
+                + `> Code Postal : \`${req.body.cpNaissanceRP}\`\n\n`
+                + `**📂 Poste :** ${posteName}\n\n**📝 Motivations :**\n${req.body.motivations}`;
     if (req.body.apport) logDesc += `\n\n**🤝 Apport :**\n${req.body.apport}`;
 
     sendLog("📄 Nouvelle Candidature", logDesc);
