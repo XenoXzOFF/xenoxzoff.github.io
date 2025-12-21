@@ -76,7 +76,7 @@ async function sendConfirmMP(userId, posteLabel) {
             .setTitle("<:on:1450921440407716051> Votre candidature écrite a bien été envoyée.")
 // V1            .setDescription(`Votre dossier pour le poste de **${posteLabel}** a bien été réceptionné par nos services.`)
             .setDescription('Une fois le formulaire envoyé, le délai de réponse est d\'environ *48 heures**.\nPassé ce délai, si vous n\'avez aucune réponse, vous pouvez demander à un RH.\n\n⚠️ Toute relance avant ce délai entraînera une sanction ou un refus immédiat.')
-            .setColor(0xc5a059).setTimestamp();
+            .setColor(0x57f288).setTimestamp();
         await user.send({ embeds: [embed] });
     } catch (e) { console.error(`❌ MP impossible pour ${userId}:`, e); }
 }
@@ -85,12 +85,12 @@ async function sendResultMP(userId, status) {
     try {
         const user = await client.users.fetch(userId);
         let config = {
-            accepte: { txt: "accepté. Bienvenue au collège !", col: 0x2ed573 },
-            refuse: { txt: "refusé pour le moment.", col: 0xff4757 },
-            revision: { txt: "mis en cours de révision.", col: 0xeccc68 }
-        }[status] || { txt: "mis à jour.", col: 0xc5a059 };
+            accepte: { txt: "accepté. Bienvenue au collège !", col: 0xf48f0c },
+            refuse: { txt: "refusé pour le moment.", col: 0xf48f0c },
+            revision: { txt: "mis en cours de révision.", col: 0xf48f0c }
+        }[status] || { txt: "mis à jour.", col: 0xf48f0c };
 // V1        const embed = new EmbedBuilder().setTitle("⚜️ Mise à jour").setDescription(`Votre dossier a été **${config.txt}**`).setColor(config.col).setTimestamp();
-            const embed = new EmbedBuilder().setTitle("<:partiel:1450921453238096094> Votre formulaire écrit a été traité").setDescription(`Connectez-vous au dashboard afin de prendre connaissance du résultat.\n\n🔗 [Cliquez ici pour accéder au Dashboard](https://clg.site.paname-75.fr/dashboard)`).setColor(config.col).setTimestamp();
+            const embed = new EmbedBuilder().setColor(0xf48f0c).setTitle("<:partiel:1450921453238096094> Votre formulaire écrit a été traité").setDescription(`Connectez-vous au dashboard afin de prendre connaissance du résultat.\n\n🔗 [Cliquez ici pour accéder au Dashboard](https://clg.site.paname-75.fr/dashboard)`).setColor(config.col).setTimestamp();
         await user.send({ embeds: [embed] });
     } catch (e) { console.error(`❌ MP impossible pour ${userId}:`, e); }
 }
