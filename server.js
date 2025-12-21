@@ -29,6 +29,22 @@ client.on('ready', () => {
 
 client.login(process.env.DISCORD_TOKEN);
 
+// --- CACHE ---
+const cache = {
+    members: null,
+    lastFetch: 0
+};
+
+async function getCachedMembers(guild) {
+    const now = Date.now();
+    if (!cache.members || (now - cache.lastFetch > 300000)) { // 300000ms = 5 minutes
+        console.log("🔄 Rafraîchissement du cache des membres Discord...");
+        cache.members = await guild.members.fetch();
+        cache.lastFetch = now;
+    }
+    return cache.members;
+}
+
 // --- HELPERS (JSON) ---
 const getDB = () => {
     if (!fs.existsSync(dbPath)) fs.writeFileSync(dbPath, JSON.stringify({ applications: [], quotas: {} }, null, 2));
@@ -154,7 +170,7 @@ app.get('/apply', async (req, res) => {
     try {
         const db = getDB();
         const guild = await client.guilds.fetch(process.env.GUILD_ID);
-        const allMembers = await guild.members.fetch();
+        const allMembers = await getCachedMembers(guild);
         const rolesStatus = {};
         if (db.quotas) {
             for (const [id, info] of Object.entries(db.quotas)) {
@@ -193,7 +209,7 @@ app.get('/membres', async (req, res) => {
     try {
         const db = getDB();
         const guild = await client.guilds.fetch(process.env.GUILD_ID);
-        const allMembers = await guild.members.fetch();
+        const allMembers = await getCachedMembers(guild);
         const effectif = {};
         if (db.quotas) {
             for (const [id, info] of Object.entries(db.quotas)) {
