@@ -84,10 +84,12 @@ app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(session({ 
-    secret: 'ps_ultra_secret', 
+    secret: process.env.SESSION_SECRET, 
     resave: false, 
     saveUninitialized: false,
-    cookie: { secure: false } 
+    // En production (derrière le proxy Fly.io), il faut activer les cookies sécurisés.
+    // Le `app.set('trust proxy', 1)` est nécessaire pour que cela fonctionne.
+    cookie: { secure: true } 
 }));
 
 app.use(passport.initialize());
@@ -104,7 +106,10 @@ passport.use(new DiscordStrategy({
         const member = await guild.members.fetch(prof.id).catch(() => null);
         prof.isAdmin = member ? member.roles.cache.has(process.env.ADMIN_ROLE_ID) : false;
         return done(null, prof);
-    } catch (e) { return done(null, prof); }
+    } catch (e) { 
+        console.error("❌ Erreur lors de la vérification de l'utilisateur via Passport:", e);
+        return done(e, null); // On signale une erreur d'authentification
+    }
 }));
 
 passport.serializeUser((u, d) => d(null, u));
@@ -159,7 +164,10 @@ app.get('/apply', async (req, res) => {
             }
         }
         res.render('apply', { rolesStatus });
-    } catch (e) { res.render('apply', { rolesStatus: {} }); }
+    } catch (e) { 
+        console.error("❌ Erreur lors du chargement des rôles pour la candidature :", e);
+        res.render('apply', { rolesStatus: {} }); 
+    }
 });
 
 app.post('/apply', async (req, res) => {
