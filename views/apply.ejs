@@ -42,11 +42,11 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">Âge RP</label>
-                        <input type="number" name="ageRP" id="ageRPInput" class="form-input" required min="10" max="99" readonly style="background: rgba(255, 255, 255, 0.1); cursor: not-allowed;">
+                        <input type="number" name="ageRP" id="ageRPInput" class="form-input" required readonly style="background: rgba(255, 255, 255, 0.1); cursor: not-allowed;">
                     </div>
                     <div class="form-group">
                         <label class="form-label">Date de Naissance RP</label>
-                        <input type="date" name="dateNaissanceRP" id="dobRPInput" class="form-input" required onchange="calculateAge()">
+                        <input type="date" name="dateNaissanceRP" id="dobRPInput" class="form-input" required onchange="calculateAge()" oninput="calculateAge()">
                     </div>
                 </div>
                 <div class="form-grid" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 30px;">
@@ -104,6 +104,9 @@
     </div>
 
     <script>
+    // Initialiser l'état du formulaire au chargement
+    window.addEventListener('load', toggleApport);
+
     function toggleApport() {
         const select = document.getElementById('posteSelect');
         const selectedOption = select.options[select.selectedIndex];
@@ -139,6 +142,17 @@
             }
             
             ageInput.value = age;
+
+            // Validation sur le champ date pour que l'erreur soit visible
+            if (age < 10) {
+                dobInput.setCustomValidity("Le personnage doit avoir au moins 10 ans.");
+            } else if (age > 99) {
+                dobInput.setCustomValidity("L'âge semble incorrect (> 99 ans).");
+            } else {
+                dobInput.setCustomValidity("");
+            }
+        } else {
+            dobInput.setCustomValidity("");
         }
     }
     </script>
