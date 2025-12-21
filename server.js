@@ -37,7 +37,7 @@ const cache = {
 
 async function getCachedMembers(guild) {
     const now = Date.now();
-    if (!cache.members || (now - cache.lastFetch > 300000)) { // 300000ms = 5 minutes
+    if (!cache.members || (now - cache.lastFetch > 60000)) { // 60000ms = 1 minute
         console.log("🔄 Rafraîchissement du cache des membres Discord...");
         cache.members = await guild.members.fetch();
         cache.lastFetch = now;
@@ -145,6 +145,46 @@ app.use((req, res, next) => {
         if (!allowedRoutes.includes(req.path)) return res.redirect('/maintenance');
     }
     next();
+});
+
+// Middleware de synchronisation des permissions (toutes les minutes)
+app.use(async (req, res, next) => {
+    // Ne rien faire si l'utilisateur n'est pas connecté
+    if (!req.isAuthenticated()) {
+        return next();
+    }
+
+    const now = Date.now();
+    const userSession = req.session.passport.user;
+
+    // Synchroniser toutes les 60 secondes (60000 ms)
+    if (!userSession.lastSync || (now - userSession.lastSync > 60000)) {
+        console.log(`🔄 Synchronisation des permissions pour ${userSession.username}...`);
+        try {
+            const guild = await client.guilds.fetch(process.env.GUILD_ID);
+            const member = await guild.members.fetch(userSession.id).catch(() => null);
+            
+            const newIsAdmin = member ? member.roles.cache.has(process.env.ADMIN_ROLE_ID) : false;
+
+            if (userSession.isAdmin !== newIsAdmin) {
+                console.log(`Permissions changées pour ${userSession.username}. Admin: ${newIsAdmin}`);
+                userSession.isAdmin = newIsAdmin;
+            }
+            
+            userSession.lastSync = now;
+            req.user.isAdmin = userSession.isAdmin; // Mettre à jour req.user pour la requête actuelle
+            
+            // Sauvegarder la session et continuer
+            return req.session.save(err => next(err));
+
+        } catch (error) {
+            console.error(`❌ Erreur de synchronisation pour ${userSession.username}:`, error);
+            return next(); // On continue même si la synchro échoue pour ne pas bloquer l'utilisateur
+        }
+    } else {
+        // Pas besoin de synchroniser, on continue
+        return next();
+    }
 });
 
 // --- ROUTES ---
