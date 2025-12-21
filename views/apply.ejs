@@ -42,11 +42,11 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">Âge RP</label>
-                        <input type="number" name="ageRP" class="form-input" required min="10" max="99">
+                        <input type="number" name="ageRP" id="ageRPInput" class="form-input" required min="10" max="99" readonly style="background: rgba(255, 255, 255, 0.1); cursor: not-allowed;">
                     </div>
                     <div class="form-group">
                         <label class="form-label">Date de Naissance RP</label>
-                        <input type="date" name="dateNaissanceRP" class="form-input" required>
+                        <input type="date" name="dateNaissanceRP" id="dobRPInput" class="form-input" required onchange="calculateAge()">
                     </div>
                 </div>
                 <div class="form-grid" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 30px;">
@@ -121,6 +121,24 @@
         } else {
             apportGroup.style.display = 'block';
             apportInput.required = true;
+        }
+    }
+
+    function calculateAge() {
+        const dobInput = document.getElementById('dobRPInput');
+        const ageInput = document.getElementById('ageRPInput');
+        
+        if (dobInput.value) {
+            const dob = new Date(dobInput.value);
+            const today = new Date();
+            let age = today.getFullYear() - dob.getFullYear();
+            const m = today.getMonth() - dob.getMonth();
+            
+            if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+                age--;
+            }
+            
+            ageInput.value = age;
         }
     }
     </script>
