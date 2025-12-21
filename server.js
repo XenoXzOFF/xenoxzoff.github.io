@@ -5,14 +5,13 @@ const passport = require('passport');
 const DiscordStrategy = require('passport-discord').Strategy;
 const { Client, GatewayIntentBits, EmbedBuilder, Partials } = require('discord.js');
 const fs = require('fs');
-const path = require('path');
 
 const app = express();
 
 // --- CONFIGURATION DES CHEMINS ---
-// Si tu utilises un volume Fly.io, change path.join(__dirname, ...) par '/data/...'
-const dbPath = path.join(__dirname, 'database.json');
-const configPath = path.join(__dirname, 'config.json');
+// Le volume sera monté sur /data, nous utilisons donc des chemins absolus.
+const dbPath = '/data/database.json';
+const configPath = '/data/config.json';
 
 // --- CONFIGURATION DU BOT DISCORD ---
 const client = new Client({ 
